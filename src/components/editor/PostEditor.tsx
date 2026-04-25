@@ -114,7 +114,7 @@ export function PostEditor() {
     if (!user) return null;
 
     const { supabase } = await import("@/integrations/supabase/client");
-    const title = text.slice(0, 60).trim() || "Untitled draft";
+    const title = text.slice(0, 60).trim() || "Borrador sin título";
 
     const { data } = await supabase.from("drafts").insert({
       user_id: user.id,
@@ -232,6 +232,22 @@ export function PostEditor() {
     return () => { mounted = false; };
   }, [user, draft]);
 
+  // Cargar script generado desde Inteligencia Viral (si existe)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = sessionStorage.getItem("viral-recreated-script");
+      if (!raw) return;
+      const data = JSON.parse(raw) as { text?: string; title?: string };
+      if (data?.text) {
+        setText(data.text);
+      }
+      sessionStorage.removeItem("viral-recreated-script");
+    } catch {
+      // ignore
+    }
+  }, []);
+
   // Upload a single file immediately to storage — DB row created ONLY after success
   const uploadFileImmediately = useCallback(async (media: MediaFile) => {
     if (!user) return;
@@ -246,7 +262,7 @@ export function PostEditor() {
       if (!currentDraftId) {
         const { data } = await supabase.from("drafts").insert({
           user_id: user.id,
-          title: text.slice(0, 60).trim() || "Untitled draft",
+          title: text.slice(0, 60).trim() || "Borrador sin título",
           text,
           format_key: selectedFormat,
         }).select("id").single();
@@ -292,9 +308,20 @@ export function PostEditor() {
         uploaded: true,
       } as any);
 
+      // Insertar el registro draft_media — archivo confirmado en storage
+      const { error: dbError } = await supabase.from("draft_media").insert({
+        draft_id: currentDraftId,
+        user_id: user.id,
+        storage_path: storagePath,
+        file_type: media.type,
+        file_name: media.file.name || "file",
+        sort_order: 0,
+        uploaded: true,
+      } as any);
+
       if (dbError) {
         console.error("[Upload] DB insert failed:", dbError);
-        throw new Error("Failed to save media record: " + dbError.message);
+        throw new Error("No se pudo guardar el archivo: " + dbError.message);
       }
 
       console.log("[Upload] DB row inserted successfully for", storagePath);
