@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Plus, Trash2, LogOut, FileText, Clock, Sparkles, Image as ImageIcon, PenLine, Eye, Video } from "lucide-react";
+import { Plus, Trash2, LogOut, FileText, Clock, Sparkles, Image as ImageIcon, PenLine, Eye, Video, Flame } from "lucide-react";
 import logoPinpost from "@/assets/logo-pinpost.png";
 import { Button } from "@/components/ui/button";
 import { FORMAT_PRESETS, type FormatKey } from "@/components/editor/formatPresets";
@@ -265,7 +265,7 @@ function DashboardPage() {
     );
   }
 
-  const firstName = profile.display_name?.split(" ")[0] || "there";
+  const firstName = profile.display_name?.split(" ")[0] || "creador";
   const getThumbnail = (draftId: string) => thumbnails.find((t) => t.draftId === draftId);
 
   return (
@@ -284,17 +284,39 @@ function DashboardPage() {
       </header>
 
       <div className="mx-auto max-w-3xl px-6 py-10 space-y-10">
-        {/* Welcome banner */}
+        {/* Banner de bienvenida */}
         <section className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Welcome back, {firstName}
+            Bienvenido, {firstName}
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-            Create, preview, and enhance your social media posts across Instagram, LinkedIn, X, and Facebook — all in one place.
+            Creá, previsualizá y optimizá tus publicaciones para Instagram, LinkedIn, X y Facebook — todo desde un solo lugar.
           </p>
         </section>
 
-        {/* Quick actions */}
+        {/* Inteligencia Viral — destacada */}
+        <Link
+          to="/inteligencia-viral/buscador"
+          className="group relative flex items-center gap-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 via-card to-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/40 active:scale-[0.99] overflow-hidden"
+        >
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
+            <Flame className="h-6 w-6" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-foreground">Inteligencia Viral</p>
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary uppercase tracking-wide">Nuevo</span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              Descubrí virales en tu nicho, espiá creadores y analizá perfiles para multiplicar tu alcance.
+            </p>
+          </div>
+          <span className="hidden sm:inline text-xs text-primary font-medium group-hover:translate-x-0.5 transition-transform">
+            Abrir →
+          </span>
+        </Link>
+
+        {/* Acciones rápidas */}
         <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
             to="/editor"
@@ -304,8 +326,8 @@ function DashboardPage() {
               <PenLine className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">New post</p>
-              <p className="text-xs text-muted-foreground">Start composing</p>
+              <p className="text-sm font-medium text-foreground">Nueva publicación</p>
+              <p className="text-xs text-muted-foreground">Empezá a escribir</p>
             </div>
           </Link>
           <button
@@ -319,8 +341,8 @@ function DashboardPage() {
               <Eye className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">Edit profile</p>
-              <p className="text-xs text-muted-foreground">Name, handle, avatar</p>
+              <p className="text-sm font-medium text-foreground">Editar perfil</p>
+              <p className="text-xs text-muted-foreground">Nombre, usuario, avatar</p>
             </div>
           </button>
           <Link
@@ -331,8 +353,8 @@ function DashboardPage() {
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">AI enhance</p>
-              <p className="text-xs text-muted-foreground">Optimize your copy</p>
+              <p className="text-sm font-medium text-foreground">Mejorar con IA</p>
+              <p className="text-xs text-muted-foreground">Optimizá tu copy</p>
             </div>
           </Link>
         </section>
@@ -341,15 +363,15 @@ function DashboardPage() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-semibold text-foreground">Your drafts</h2>
+              <h2 className="text-base font-semibold text-foreground">Tus borradores</h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {drafts.length === 0 ? "No saved drafts yet" : `${drafts.length} draft${drafts.length === 1 ? "" : "s"} saved`}
+                {drafts.length === 0 ? "Aún no tenés borradores guardados" : `${drafts.length} borrador${drafts.length === 1 ? "" : "es"} guardado${drafts.length === 1 ? "" : "s"}`}
               </p>
             </div>
             <Button size="sm" className="gap-1.5" asChild>
               <Link to="/editor">
                 <Plus className="h-3.5 w-3.5" />
-                New post
+                Nueva publicación
               </Link>
             </Button>
           </div>
@@ -363,14 +385,14 @@ function DashboardPage() {
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted mx-auto mb-3">
                 <FileText className="h-7 w-7 text-muted-foreground" />
               </div>
-              <p className="text-sm font-medium text-foreground">No drafts yet</p>
+              <p className="text-sm font-medium text-foreground">Todavía no hay borradores</p>
               <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
-                Create your first post to see how it looks across all platforms before publishing.
+                Creá tu primera publicación para ver cómo se ve en todas las redes antes de publicarla.
               </p>
               <Button size="sm" variant="outline" className="mt-4 gap-1.5 bg-white" asChild>
                 <Link to="/editor">
                   <Plus className="h-3.5 w-3.5" />
-                  Create your first post
+                  Crear mi primera publicación
                 </Link>
               </Button>
             </div>
@@ -414,16 +436,16 @@ function DashboardPage() {
                     <div className="flex flex-1 flex-col justify-between p-3.5">
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-foreground truncate leading-tight">
-                          {draft.title || "Untitled draft"}
+                          {draft.title || "Borrador sin título"}
                         </p>
                         <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
-                          {draft.text?.slice(0, 120) || "Empty draft"}
+                          {draft.text?.slice(0, 120) || "Borrador vacío"}
                         </p>
                       </div>
                       <div className="flex items-center justify-between mt-2.5">
                         <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
                           <Clock className="h-2.5 w-2.5" />
-                          {new Date(draft.updated_at).toLocaleDateString(undefined, {
+                          {new Date(draft.updated_at).toLocaleDateString("es-AR", {
                             month: "short",
                             day: "numeric",
                             year: "numeric",
@@ -444,11 +466,11 @@ function DashboardPage() {
           )}
         </section>
 
-        {/* Profile card */}
+        {/* Tarjeta de perfil */}
         <section id="profile-section" className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-5">
-            <h2 className="text-base font-semibold text-foreground">Profile settings</h2>
-            <span className="text-xs text-muted-foreground">· Shown in previews</span>
+            <h2 className="text-base font-semibold text-foreground">Configuración de perfil</h2>
+            <span className="text-xs text-muted-foreground">· Se muestra en las previews</span>
           </div>
           <div className="flex items-start gap-5">
             <input
@@ -461,38 +483,38 @@ function DashboardPage() {
             <button
               onClick={() => avatarInputRef.current?.click()}
               className="h-20 w-20 shrink-0 rounded-full border border-border bg-muted/40 flex items-center justify-center overflow-hidden transition-all hover:border-primary/40 hover:shadow-md active:scale-95"
-              title="Upload profile image"
+              title="Subir foto de perfil"
             >
               {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt="Profile" className="h-full w-full object-cover rounded-full" />
+                <img src={profile.avatar_url} alt="Perfil" className="h-full w-full object-cover rounded-full" />
               ) : (
                 <ImageIcon className="h-5 w-5 text-muted-foreground/60" />
               )}
             </button>
             <div className="flex-1 space-y-3">
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Display name</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Nombre a mostrar</label>
                 <input
                   value={profile.display_name}
                   onChange={(e) => setProfile((p) => ({ ...p, display_name: e.target.value }))}
-                  placeholder="Your name"
+                  placeholder="Tu nombre"
                   className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Handle</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Usuario</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">@</span>
                   <input
                     value={profile.handle}
                     onChange={(e) => setProfile((p) => ({ ...p, handle: e.target.value.replace(/^@/, "") }))}
-                    placeholder="handle"
+                    placeholder="usuario"
                     className="w-full rounded-lg border border-input bg-transparent pl-7 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-shadow"
                   />
                 </div>
               </div>
               <Button size="sm" onClick={saveProfile} disabled={saving} className="mt-1">
-                {saving ? "Saving…" : "Save profile"}
+                {saving ? "Guardando…" : "Guardar perfil"}
               </Button>
             </div>
           </div>
