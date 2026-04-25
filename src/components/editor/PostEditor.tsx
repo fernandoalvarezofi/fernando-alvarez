@@ -114,7 +114,7 @@ export function PostEditor() {
     if (!user) return null;
 
     const { supabase } = await import("@/integrations/supabase/client");
-    const title = text.slice(0, 60).trim() || "Untitled draft";
+    const title = text.slice(0, 60).trim() || "Borrador sin título";
 
     const { data } = await supabase.from("drafts").insert({
       user_id: user.id,
@@ -232,6 +232,22 @@ export function PostEditor() {
     return () => { mounted = false; };
   }, [user, draft]);
 
+  // Cargar script generado desde Inteligencia Viral (si existe)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = sessionStorage.getItem("viral-recreated-script");
+      if (!raw) return;
+      const data = JSON.parse(raw) as { text?: string; title?: string };
+      if (data?.text) {
+        setText(data.text);
+      }
+      sessionStorage.removeItem("viral-recreated-script");
+    } catch {
+      // ignore
+    }
+  }, []);
+
   // Upload a single file immediately to storage — DB row created ONLY after success
   const uploadFileImmediately = useCallback(async (media: MediaFile) => {
     if (!user) return;
@@ -246,7 +262,7 @@ export function PostEditor() {
       if (!currentDraftId) {
         const { data } = await supabase.from("drafts").insert({
           user_id: user.id,
-          title: text.slice(0, 60).trim() || "Untitled draft",
+          title: text.slice(0, 60).trim() || "Borrador sin título",
           text,
           format_key: selectedFormat,
         }).select("id").single();
@@ -281,7 +297,7 @@ export function PostEditor() {
 
       console.log("[Upload] Storage upload complete, inserting DB row");
 
-      // Only NOW insert the draft_media row — file is confirmed in storage
+      // Insertar el registro draft_media — archivo confirmado en storage
       const { error: dbError } = await supabase.from("draft_media").insert({
         draft_id: currentDraftId,
         user_id: user.id,
@@ -294,7 +310,7 @@ export function PostEditor() {
 
       if (dbError) {
         console.error("[Upload] DB insert failed:", dbError);
-        throw new Error("Failed to save media record: " + dbError.message);
+        throw new Error("No se pudo guardar el archivo: " + dbError.message);
       }
 
       console.log("[Upload] DB row inserted successfully for", storagePath);
@@ -324,7 +340,7 @@ export function PostEditor() {
     setSaving(true);
     try {
       const { supabase } = await import("@/integrations/supabase/client");
-      const title = text.slice(0, 60).trim() || "Untitled draft";
+      const title = text.slice(0, 60).trim() || "Borrador sin título";
 
       let currentDraftId = draftId;
 
@@ -468,10 +484,10 @@ export function PostEditor() {
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground hidden md:inline">{user?.email}</span>
           {hasActiveUploads && (
-            <span className="text-xs text-muted-foreground animate-pulse">Uploading media…</span>
+            <span className="text-xs text-muted-foreground animate-pulse">Subiendo archivos…</span>
           )}
           <Button variant="outline" size="sm" onClick={saveDraft} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+            {saving ? "Guardando…" : "Guardar borrador"}
           </Button>
           
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={signOut}>
@@ -484,7 +500,7 @@ export function PostEditor() {
         {/* Editor pane */}
         <div className="flex w-full flex-col border-r border-border bg-white md:w-[420px] shrink-0">
           <div className="border-b border-border px-4 py-3">
-            <h2 className="text-sm font-medium text-foreground">Compose</h2>
+            <h2 className="text-sm font-medium text-foreground">Componer</h2>
           </div>
 
           <div className="flex-1 overflow-auto p-4 space-y-4">
@@ -500,10 +516,10 @@ export function PostEditor() {
               <button
                 onClick={() => profileImageRef.current?.click()}
                 className="h-10 w-10 shrink-0 rounded-full border border-border bg-muted flex items-center justify-center overflow-hidden transition-colors hover:border-primary/40 active:scale-95"
-                title="Upload profile image"
+                title="Subir foto de perfil"
               >
                 {profileImageUrl ? (
-                  <img src={profileImageUrl} alt="Profile" className="h-full w-full object-cover" />
+                  <img src={profileImageUrl} alt="Perfil" className="h-full w-full object-cover" />
                 ) : (
                   <span className="text-sm font-semibold text-muted-foreground">
                     {displayName?.[0]?.toUpperCase() || "?"}
@@ -514,7 +530,7 @@ export function PostEditor() {
                 <input
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Display name"
+                  placeholder="Nombre a mostrar"
                   className="flex-1 rounded-md border border-input bg-transparent px-2.5 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
                 <div className="relative flex-1">
@@ -522,7 +538,7 @@ export function PostEditor() {
                   <input
                     value={handle}
                     onChange={(e) => setHandle(e.target.value.replace(/^@/, ""))}
-                    placeholder="handle"
+                    placeholder="usuario"
                     className="w-full rounded-md border border-input bg-transparent pl-6 pr-2.5 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
@@ -533,7 +549,7 @@ export function PostEditor() {
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Write your post here…"
+              placeholder="Escribí tu publicación acá…"
               className="w-full min-h-[180px] resize-none rounded-lg border border-input bg-transparent p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring leading-relaxed"
             />
 
@@ -570,7 +586,7 @@ export function PostEditor() {
                 className="flex w-full items-center justify-between rounded-lg border border-border px-3 py-2.5 text-sm transition-colors hover:border-primary/40 active:scale-[0.98]"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Format</span>
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Formato</span>
                   <span className="font-medium text-foreground">{FORMAT_PRESETS[selectedFormat].shortLabel}</span>
                 </div>
                 <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${formatOpen ? "rotate-180" : ""}`} />
@@ -617,10 +633,10 @@ export function PostEditor() {
                       {noPreview ? (
                         <div className="flex h-full w-full items-center justify-center flex-col gap-1 p-2">
                           <AlertCircle className="h-5 w-5 text-muted-foreground" />
-                          <span className="text-[10px] text-muted-foreground text-center">Upload pending</span>
+                          <span className="text-[10px] text-muted-foreground text-center">Subida pendiente</span>
                         </div>
                       ) : media.type === "image" ? (
-                        <img src={media.previewUrl || media.url} alt="Upload preview" className="h-full w-full object-cover" />
+                        <img src={media.previewUrl || media.url} alt="Vista previa" className="h-full w-full object-cover" />
                       ) : (
                         <video src={media.previewUrl || media.url} className="h-full w-full object-cover" controls playsInline />
                       )}
@@ -640,7 +656,7 @@ export function PostEditor() {
                             onClick={() => uploadFileImmediately(media)}
                             className="flex items-center gap-1 rounded-md bg-destructive/10 px-2 py-1 text-xs text-destructive"
                           >
-                            <RotateCw className="h-3 w-3" /> Retry
+                            <RotateCw className="h-3 w-3" /> Reintentar
                           </button>
                         </div>
                       )}
@@ -688,7 +704,7 @@ export function PostEditor() {
                 <ImagePlus className="h-4 w-4" />
                 <Video className="h-4 w-4" />
               </div>
-              <span>Add images or video</span>
+              <span>Agregar imágenes o video</span>
             </button>
           </div>
         </div>
@@ -704,7 +720,7 @@ export function PostEditor() {
                   : "text-muted-foreground hover:text-foreground hover:bg-accent"
               }`}
             >
-              All
+              Todas
             </button>
             {platforms.map((p) => (
               <button
