@@ -139,6 +139,81 @@ export type Database = {
         }
         Relationships: []
       }
+      spy_agent_settings: {
+        Row: {
+          alert_frequency: string
+          created_at: string
+          email_alerts_enabled: boolean
+          min_score_threshold: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alert_frequency?: string
+          created_at?: string
+          email_alerts_enabled?: boolean
+          min_score_threshold?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alert_frequency?: string
+          created_at?: string
+          email_alerts_enabled?: boolean
+          min_score_threshold?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tracked_accounts: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          detected_within_24h: boolean
+          display_name: string | null
+          handle: string
+          id: string
+          is_active: boolean
+          last_viral_at: string | null
+          last_viral_score: number | null
+          last_viral_thumbnail: string | null
+          platform: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          detected_within_24h?: boolean
+          display_name?: string | null
+          handle: string
+          id?: string
+          is_active?: boolean
+          last_viral_at?: string | null
+          last_viral_score?: number | null
+          last_viral_thumbnail?: string | null
+          platform: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          detected_within_24h?: boolean
+          display_name?: string | null
+          handle?: string
+          id?: string
+          is_active?: boolean
+          last_viral_at?: string | null
+          last_viral_score?: number | null
+          last_viral_thumbnail?: string | null
+          platform?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -157,6 +232,60 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_videos: {
+        Row: {
+          analysis: Json | null
+          caption: string | null
+          comments: number
+          created_at: string
+          id: string
+          likes: number
+          niche: string | null
+          niche_avg_views: number
+          niche_score: number
+          platform: string
+          thumbnail_url: string | null
+          updated_at: string
+          url: string
+          user_id: string
+          views: number
+        }
+        Insert: {
+          analysis?: Json | null
+          caption?: string | null
+          comments?: number
+          created_at?: string
+          id?: string
+          likes?: number
+          niche?: string | null
+          niche_avg_views?: number
+          niche_score?: number
+          platform: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          url: string
+          user_id: string
+          views?: number
+        }
+        Update: {
+          analysis?: Json | null
+          caption?: string | null
+          comments?: number
+          created_at?: string
+          id?: string
+          likes?: number
+          niche?: string | null
+          niche_avg_views?: number
+          niche_score?: number
+          platform?: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          url?: string
+          user_id?: string
+          views?: number
         }
         Relationships: []
       }
