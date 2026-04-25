@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InteligenciaViralRouteImport } from './routes/inteligencia-viral'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRecreateScriptRouteImport } from './routes/api.recreate-script'
 import { Route as ApiEnhancePostRouteImport } from './routes/api.enhance-post'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InteligenciaViralRoute = InteligenciaViralRouteImport.update({
+  id: '/inteligencia-viral',
+  path: '/inteligencia-viral',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditorRoute = EditorRouteImport.update({
@@ -35,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRecreateScriptRoute = ApiRecreateScriptRouteImport.update({
+  id: '/api/recreate-script',
+  path: '/api/recreate-script',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiEnhancePostRoute = ApiEnhancePostRouteImport.update({
   id: '/api/enhance-post',
   path: '/api/enhance-post',
@@ -45,44 +57,68 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
+  '/inteligencia-viral': typeof InteligenciaViralRoute
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
+  '/api/recreate-script': typeof ApiRecreateScriptRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
+  '/inteligencia-viral': typeof InteligenciaViralRoute
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
+  '/api/recreate-script': typeof ApiRecreateScriptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
+  '/inteligencia-viral': typeof InteligenciaViralRoute
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
+  '/api/recreate-script': typeof ApiRecreateScriptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/editor' | '/login' | '/api/enhance-post'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/editor'
+    | '/inteligencia-viral'
+    | '/login'
+    | '/api/enhance-post'
+    | '/api/recreate-script'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/editor' | '/login' | '/api/enhance-post'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/editor'
+    | '/inteligencia-viral'
+    | '/login'
+    | '/api/enhance-post'
+    | '/api/recreate-script'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/editor'
+    | '/inteligencia-viral'
     | '/login'
     | '/api/enhance-post'
+    | '/api/recreate-script'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   EditorRoute: typeof EditorRoute
+  InteligenciaViralRoute: typeof InteligenciaViralRoute
   LoginRoute: typeof LoginRoute
   ApiEnhancePostRoute: typeof ApiEnhancePostRoute
+  ApiRecreateScriptRoute: typeof ApiRecreateScriptRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inteligencia-viral': {
+      id: '/inteligencia-viral'
+      path: '/inteligencia-viral'
+      fullPath: '/inteligencia-viral'
+      preLoaderRoute: typeof InteligenciaViralRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/editor': {
@@ -115,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/recreate-script': {
+      id: '/api/recreate-script'
+      path: '/api/recreate-script'
+      fullPath: '/api/recreate-script'
+      preLoaderRoute: typeof ApiRecreateScriptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/enhance-post': {
       id: '/api/enhance-post'
       path: '/api/enhance-post'
@@ -129,8 +179,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   EditorRoute: EditorRoute,
+  InteligenciaViralRoute: InteligenciaViralRoute,
   LoginRoute: LoginRoute,
   ApiEnhancePostRoute: ApiEnhancePostRoute,
+  ApiRecreateScriptRoute: ApiRecreateScriptRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
