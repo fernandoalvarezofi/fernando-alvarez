@@ -28,7 +28,7 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
 
   const enhance = async () => {
     if (!text.trim()) {
-      toast.error("Write something first before enhancing.");
+      toast.error("Escribí algo primero antes de mejorarlo.");
       return;
     }
 
@@ -40,7 +40,7 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session?.access_token) {
-        toast.error("Please log in to use AI enhance.");
+        toast.error("Iniciá sesión para usar la mejora con IA.");
         return;
       }
 
@@ -56,18 +56,18 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
       const data = await resp.json();
 
       if (!resp.ok) {
-        toast.error(data.error || "Failed to enhance post.");
+        toast.error(data.error || "No se pudo mejorar la publicación.");
         return;
       }
 
       if (data.suggestions && Array.isArray(data.suggestions)) {
         setSuggestions(data.suggestions);
       } else {
-        toast.error("Unexpected response from AI.");
+        toast.error("Respuesta inesperada de la IA.");
       }
     } catch (e) {
       console.error("Enhance error:", e);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Algo salió mal. Probá de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
   const handleSelect = (suggestion: Suggestion) => {
     onSelect(suggestion.text);
     setSuggestions(null);
-    toast.success(`Applied "${suggestion.label}" variation.`);
+    toast.success(`Variación "${suggestion.label}" aplicada.`);
   };
 
   const platforms: Platform[] = ["instagram", "linkedin", "x", "facebook"];
@@ -94,12 +94,12 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
         {loading ? (
           <>
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            Enhancing…
+            Mejorando…
           </>
         ) : (
           <>
             <Sparkles className="h-3.5 w-3.5" />
-            Enhance with AI
+            Mejorar con IA
           </>
         )}
       </Button>
@@ -113,7 +113,7 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
           <div className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-lg -translate-y-1/2 rounded-xl border border-border bg-popover p-4 shadow-xl sm:inset-x-auto sm:w-[480px]">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-sm font-semibold text-foreground">
-                Pick a variation
+                Elegí una variación
               </h3>
               <button
                 onClick={() => setSuggestions(null)}
@@ -141,7 +141,7 @@ export function EnhanceButton({ text, onSelect }: EnhanceButtonProps) {
                         onClick={() => handleSelect(s)}
                       >
                         <Check className="h-3 w-3" />
-                        Use this
+                        Usar esta
                       </Button>
                     </div>
 

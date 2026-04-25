@@ -47,7 +47,7 @@ function LoginPage() {
       .catch((error) => {
         console.error("Failed to load Google sign-in", error);
         if (!mounted) return;
-        setAuthError("Google sign-in could not be loaded. Please refresh and try again.");
+        setAuthError("No se pudo cargar el inicio con Google. Recargá la página y probá de nuevo.");
       });
 
     return () => {
@@ -68,7 +68,7 @@ function LoginPage() {
       });
       if (error) {
         console.error("Sign in error:", error);
-        setAuthError("Google sign-in did not start. Please try again.");
+        setAuthError("No se pudo iniciar sesión con Google. Probá de nuevo.");
       }
     } finally {
       setSigningIn(false);
@@ -94,7 +94,7 @@ function LoginPage() {
         if (error) {
           setAuthError(error.message);
         } else {
-          toast.success("Check your email for a confirmation link.");
+          toast.success("Revisá tu email para confirmar tu cuenta.");
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -107,7 +107,7 @@ function LoginPage() {
       }
     } catch (e) {
       console.error("Email auth error:", e);
-      setAuthError("Something went wrong. Please try again.");
+      setAuthError("Algo salió mal. Probá de nuevo.");
     } finally {
       setEmailLoading(false);
     }
@@ -119,7 +119,7 @@ function LoginPage() {
         <div className="flex flex-col items-center gap-2 mb-8">
           <Link to="/"><img src={logoPinpost} alt="PinPost" className="h-10 w-auto" /></Link>
           <p className="text-sm text-muted-foreground text-center">
-            Sign in to preview your posts across every platform
+            Iniciá sesión para previsualizar tus publicaciones en cada red social
           </p>
         </div>
 
@@ -137,7 +137,7 @@ function LoginPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
             </svg>
-            {signingIn ? "Signing in…" : lovableAuth ? "Continue with Google" : "Loading…"}
+            {signingIn ? "Iniciando sesión…" : lovableAuth ? "Continuar con Google" : "Cargando…"}
           </Button>
 
           <div className="relative">
@@ -145,7 +145,7 @@ function LoginPage() {
               <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-card px-2 text-muted-foreground">or</span>
+              <span className="bg-card px-2 text-muted-foreground">o</span>
             </div>
           </div>
 
@@ -155,14 +155,14 @@ function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="vos@ejemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-xs">Password</Label>
+              <Label htmlFor="password" className="text-xs">Contraseña</Label>
               <Input
                 id="password"
                 type="password"
@@ -179,31 +179,31 @@ function LoginPage() {
               ) : (
                 <Mail className="h-4 w-4" />
               )}
-              {mode === "login" ? "Sign in" : "Create account"}
+              {mode === "login" ? "Iniciar sesión" : "Crear cuenta"}
             </Button>
           </form>
 
           <p className="text-center text-xs text-muted-foreground">
             {mode === "login" ? (
               <>
-                Don't have an account?{" "}
+                ¿No tenés cuenta?{" "}
                 <button
                   type="button"
                   onClick={() => { setMode("signup"); setAuthError(null); }}
                   className="font-medium text-primary underline-offset-2 hover:underline"
                 >
-                  Sign up
+                  Registrate
                 </button>
               </>
             ) : (
               <>
-                Already have an account?{" "}
+                ¿Ya tenés cuenta?{" "}
                 <button
                   type="button"
                   onClick={() => { setMode("login"); setAuthError(null); }}
                   className="font-medium text-primary underline-offset-2 hover:underline"
                 >
-                  Sign in
+                  Iniciá sesión
                 </button>
               </>
             )}
@@ -215,7 +215,7 @@ function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          By signing in, you agree to our terms of service and privacy policy.
+          Al iniciar sesión, aceptás nuestros términos de servicio y política de privacidad.
         </p>
       </div>
     </div>
