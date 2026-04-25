@@ -297,17 +297,6 @@ export function PostEditor() {
 
       console.log("[Upload] Storage upload complete, inserting DB row");
 
-      // Only NOW insert the draft_media row — file is confirmed in storage
-      const { error: dbError } = await supabase.from("draft_media").insert({
-        draft_id: currentDraftId,
-        user_id: user.id,
-        storage_path: storagePath,
-        file_type: media.type,
-        file_name: media.file.name || "file",
-        sort_order: 0,
-        uploaded: true,
-      } as any);
-
       // Insertar el registro draft_media — archivo confirmado en storage
       const { error: dbError } = await supabase.from("draft_media").insert({
         draft_id: currentDraftId,
