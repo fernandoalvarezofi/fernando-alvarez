@@ -14,6 +14,10 @@ import { Route as InteligenciaViralRouteImport } from './routes/inteligencia-vir
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InteligenciaViralSpyAgentRouteImport } from './routes/inteligencia-viral.spy-agent'
+import { Route as InteligenciaViralMisVideosRouteImport } from './routes/inteligencia-viral.mis-videos'
+import { Route as InteligenciaViralBuscadorRouteImport } from './routes/inteligencia-viral.buscador'
+import { Route as InteligenciaViralAnalizarPerfilRouteImport } from './routes/inteligencia-viral.analizar-perfil'
 import { Route as ApiRecreateScriptRouteImport } from './routes/api.recreate-script'
 import { Route as ApiEnhancePostRouteImport } from './routes/api.enhance-post'
 
@@ -42,6 +46,30 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InteligenciaViralSpyAgentRoute =
+  InteligenciaViralSpyAgentRouteImport.update({
+    id: '/spy-agent',
+    path: '/spy-agent',
+    getParentRoute: () => InteligenciaViralRoute,
+  } as any)
+const InteligenciaViralMisVideosRoute =
+  InteligenciaViralMisVideosRouteImport.update({
+    id: '/mis-videos',
+    path: '/mis-videos',
+    getParentRoute: () => InteligenciaViralRoute,
+  } as any)
+const InteligenciaViralBuscadorRoute =
+  InteligenciaViralBuscadorRouteImport.update({
+    id: '/buscador',
+    path: '/buscador',
+    getParentRoute: () => InteligenciaViralRoute,
+  } as any)
+const InteligenciaViralAnalizarPerfilRoute =
+  InteligenciaViralAnalizarPerfilRouteImport.update({
+    id: '/analizar-perfil',
+    path: '/analizar-perfil',
+    getParentRoute: () => InteligenciaViralRoute,
+  } as any)
 const ApiRecreateScriptRoute = ApiRecreateScriptRouteImport.update({
   id: '/api/recreate-script',
   path: '/api/recreate-script',
@@ -57,29 +85,41 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
-  '/inteligencia-viral': typeof InteligenciaViralRoute
+  '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
+  '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
+  '/inteligencia-viral/buscador': typeof InteligenciaViralBuscadorRoute
+  '/inteligencia-viral/mis-videos': typeof InteligenciaViralMisVideosRoute
+  '/inteligencia-viral/spy-agent': typeof InteligenciaViralSpyAgentRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
-  '/inteligencia-viral': typeof InteligenciaViralRoute
+  '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
+  '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
+  '/inteligencia-viral/buscador': typeof InteligenciaViralBuscadorRoute
+  '/inteligencia-viral/mis-videos': typeof InteligenciaViralMisVideosRoute
+  '/inteligencia-viral/spy-agent': typeof InteligenciaViralSpyAgentRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/editor': typeof EditorRoute
-  '/inteligencia-viral': typeof InteligenciaViralRoute
+  '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
+  '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
+  '/inteligencia-viral/buscador': typeof InteligenciaViralBuscadorRoute
+  '/inteligencia-viral/mis-videos': typeof InteligenciaViralMisVideosRoute
+  '/inteligencia-viral/spy-agent': typeof InteligenciaViralSpyAgentRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +131,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/enhance-post'
     | '/api/recreate-script'
+    | '/inteligencia-viral/analizar-perfil'
+    | '/inteligencia-viral/buscador'
+    | '/inteligencia-viral/mis-videos'
+    | '/inteligencia-viral/spy-agent'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +144,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/enhance-post'
     | '/api/recreate-script'
+    | '/inteligencia-viral/analizar-perfil'
+    | '/inteligencia-viral/buscador'
+    | '/inteligencia-viral/mis-videos'
+    | '/inteligencia-viral/spy-agent'
   id:
     | '__root__'
     | '/'
@@ -109,13 +157,17 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/enhance-post'
     | '/api/recreate-script'
+    | '/inteligencia-viral/analizar-perfil'
+    | '/inteligencia-viral/buscador'
+    | '/inteligencia-viral/mis-videos'
+    | '/inteligencia-viral/spy-agent'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   EditorRoute: typeof EditorRoute
-  InteligenciaViralRoute: typeof InteligenciaViralRoute
+  InteligenciaViralRoute: typeof InteligenciaViralRouteWithChildren
   LoginRoute: typeof LoginRoute
   ApiEnhancePostRoute: typeof ApiEnhancePostRoute
   ApiRecreateScriptRoute: typeof ApiRecreateScriptRoute
@@ -158,6 +210,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inteligencia-viral/spy-agent': {
+      id: '/inteligencia-viral/spy-agent'
+      path: '/spy-agent'
+      fullPath: '/inteligencia-viral/spy-agent'
+      preLoaderRoute: typeof InteligenciaViralSpyAgentRouteImport
+      parentRoute: typeof InteligenciaViralRoute
+    }
+    '/inteligencia-viral/mis-videos': {
+      id: '/inteligencia-viral/mis-videos'
+      path: '/mis-videos'
+      fullPath: '/inteligencia-viral/mis-videos'
+      preLoaderRoute: typeof InteligenciaViralMisVideosRouteImport
+      parentRoute: typeof InteligenciaViralRoute
+    }
+    '/inteligencia-viral/buscador': {
+      id: '/inteligencia-viral/buscador'
+      path: '/buscador'
+      fullPath: '/inteligencia-viral/buscador'
+      preLoaderRoute: typeof InteligenciaViralBuscadorRouteImport
+      parentRoute: typeof InteligenciaViralRoute
+    }
+    '/inteligencia-viral/analizar-perfil': {
+      id: '/inteligencia-viral/analizar-perfil'
+      path: '/analizar-perfil'
+      fullPath: '/inteligencia-viral/analizar-perfil'
+      preLoaderRoute: typeof InteligenciaViralAnalizarPerfilRouteImport
+      parentRoute: typeof InteligenciaViralRoute
+    }
     '/api/recreate-script': {
       id: '/api/recreate-script'
       path: '/api/recreate-script'
@@ -175,11 +255,28 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface InteligenciaViralRouteChildren {
+  InteligenciaViralAnalizarPerfilRoute: typeof InteligenciaViralAnalizarPerfilRoute
+  InteligenciaViralBuscadorRoute: typeof InteligenciaViralBuscadorRoute
+  InteligenciaViralMisVideosRoute: typeof InteligenciaViralMisVideosRoute
+  InteligenciaViralSpyAgentRoute: typeof InteligenciaViralSpyAgentRoute
+}
+
+const InteligenciaViralRouteChildren: InteligenciaViralRouteChildren = {
+  InteligenciaViralAnalizarPerfilRoute: InteligenciaViralAnalizarPerfilRoute,
+  InteligenciaViralBuscadorRoute: InteligenciaViralBuscadorRoute,
+  InteligenciaViralMisVideosRoute: InteligenciaViralMisVideosRoute,
+  InteligenciaViralSpyAgentRoute: InteligenciaViralSpyAgentRoute,
+}
+
+const InteligenciaViralRouteWithChildren =
+  InteligenciaViralRoute._addFileChildren(InteligenciaViralRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   EditorRoute: EditorRoute,
-  InteligenciaViralRoute: InteligenciaViralRoute,
+  InteligenciaViralRoute: InteligenciaViralRouteWithChildren,
   LoginRoute: LoginRoute,
   ApiEnhancePostRoute: ApiEnhancePostRoute,
   ApiRecreateScriptRoute: ApiRecreateScriptRoute,
