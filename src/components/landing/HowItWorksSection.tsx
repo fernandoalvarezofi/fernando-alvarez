@@ -43,7 +43,7 @@ export function HowItWorksSection() {
       <div className="mx-auto max-w-6xl px-6" ref={ref}>
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight text-background md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-            From draft to pixel-perfect in minutes
+            Del borrador al post perfecto en minutos
           </h2>
         </div>
 
