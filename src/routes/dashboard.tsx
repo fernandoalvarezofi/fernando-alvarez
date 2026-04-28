@@ -371,7 +371,7 @@ function DashboardPage() {
             <div>
               <h2 className="text-base font-semibold text-foreground">Tus borradores</h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {drafts.length === 0 ? "Aún no tenés borradores guardados" : `${drafts.length} borrador${drafts.length === 1 ? "" : "es"} guardado${drafts.length === 1 ? "" : "s"}`}
+                {visibleDrafts.length === 0 ? "Aún no tenés borradores guardados" : `${visibleDrafts.length} borrador${visibleDrafts.length === 1 ? "" : "es"} guardado${visibleDrafts.length === 1 ? "" : "s"}`}
               </p>
             </div>
             <Button size="sm" className="gap-1.5" asChild>
@@ -386,7 +386,7 @@ function DashboardPage() {
             <div className="flex items-center justify-center py-16">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>
-          ) : drafts.length === 0 ? (
+          ) : visibleDrafts.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border py-16 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted mx-auto mb-3">
                 <FileText className="h-7 w-7 text-muted-foreground" />
@@ -404,7 +404,7 @@ function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {drafts.map((draft) => {
+              {visibleDrafts.map((draft) => {
                 const format = FORMAT_PRESETS[draft.format_key as FormatKey];
                 const thumb = getThumbnail(draft.id);
                 return (
