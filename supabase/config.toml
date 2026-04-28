@@ -1,1 +1,4 @@
 project_id = "roormnjpnkagndbtftgq"
+
+[functions.spy-check]
+verify_jwt = false

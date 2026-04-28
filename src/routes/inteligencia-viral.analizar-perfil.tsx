@@ -11,7 +11,6 @@ import { ViralVideoCard } from "@/components/viral/ViralVideoCard";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
 import { PlatformIcon } from "@/components/viral/PlatformIcon";
 import { PLATFORM_LABELS, formatCompact, type Platform, type ProfileAnalysis, type ViralVideo } from "@/lib/viral/types";
-import { getMockProfileAnalysis } from "@/lib/viral/mockData";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
@@ -20,21 +19,41 @@ export const Route = createFileRoute("/inteligencia-viral/analizar-perfil")({
 });
 
 function AnalizarPerfilPage() {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [handle, setHandle] = useState("");
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<ProfileAnalysis | null>(null);
   const [selected, setSelected] = useState<ViralVideo | null>(null);
 
-  function analyze() {
+  async function analyze() {
     if (!handle.trim()) return;
+    if (!session) {
+      toast.error("Necesitás iniciar sesión para analizar perfiles.");
+      return;
+    }
     setLoading(true);
     setProfile(null);
-    setTimeout(() => {
-      setProfile(getMockProfileAnalysis(handle, platform));
+    try {
+      const res = await fetch("/api/analizar-perfil", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ handle: handle.trim(), platform }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Error al analizar el perfil");
+      }
+      setProfile(data as ProfileAnalysis);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Error inesperado";
+      toast.error(msg);
+    } finally {
       setLoading(false);
-    }, 700);
+    }
   }
 
   async function addToSpy() {

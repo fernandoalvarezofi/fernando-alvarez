@@ -20,6 +20,8 @@ import { Route as InteligenciaViralBuscadorRouteImport } from './routes/intelige
 import { Route as InteligenciaViralAnalizarPerfilRouteImport } from './routes/inteligencia-viral.analizar-perfil'
 import { Route as ApiRecreateScriptRouteImport } from './routes/api.recreate-script'
 import { Route as ApiEnhancePostRouteImport } from './routes/api.enhance-post'
+import { Route as ApiBuscarViralesRouteImport } from './routes/api.buscar-virales'
+import { Route as ApiAnalizarPerfilRouteImport } from './routes/api.analizar-perfil'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -80,6 +82,16 @@ const ApiEnhancePostRoute = ApiEnhancePostRouteImport.update({
   path: '/api/enhance-post',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBuscarViralesRoute = ApiBuscarViralesRouteImport.update({
+  id: '/api/buscar-virales',
+  path: '/api/buscar-virales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalizarPerfilRoute = ApiAnalizarPerfilRouteImport.update({
+  id: '/api/analizar-perfil',
+  path: '/api/analizar-perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,6 +99,8 @@ export interface FileRoutesByFullPath {
   '/editor': typeof EditorRoute
   '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
+  '/api/analizar-perfil': typeof ApiAnalizarPerfilRoute
+  '/api/buscar-virales': typeof ApiBuscarViralesRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
   '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
@@ -100,6 +114,8 @@ export interface FileRoutesByTo {
   '/editor': typeof EditorRoute
   '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
+  '/api/analizar-perfil': typeof ApiAnalizarPerfilRoute
+  '/api/buscar-virales': typeof ApiBuscarViralesRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
   '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
@@ -114,6 +130,8 @@ export interface FileRoutesById {
   '/editor': typeof EditorRoute
   '/inteligencia-viral': typeof InteligenciaViralRouteWithChildren
   '/login': typeof LoginRoute
+  '/api/analizar-perfil': typeof ApiAnalizarPerfilRoute
+  '/api/buscar-virales': typeof ApiBuscarViralesRoute
   '/api/enhance-post': typeof ApiEnhancePostRoute
   '/api/recreate-script': typeof ApiRecreateScriptRoute
   '/inteligencia-viral/analizar-perfil': typeof InteligenciaViralAnalizarPerfilRoute
@@ -129,6 +147,8 @@ export interface FileRouteTypes {
     | '/editor'
     | '/inteligencia-viral'
     | '/login'
+    | '/api/analizar-perfil'
+    | '/api/buscar-virales'
     | '/api/enhance-post'
     | '/api/recreate-script'
     | '/inteligencia-viral/analizar-perfil'
@@ -142,6 +162,8 @@ export interface FileRouteTypes {
     | '/editor'
     | '/inteligencia-viral'
     | '/login'
+    | '/api/analizar-perfil'
+    | '/api/buscar-virales'
     | '/api/enhance-post'
     | '/api/recreate-script'
     | '/inteligencia-viral/analizar-perfil'
@@ -155,6 +177,8 @@ export interface FileRouteTypes {
     | '/editor'
     | '/inteligencia-viral'
     | '/login'
+    | '/api/analizar-perfil'
+    | '/api/buscar-virales'
     | '/api/enhance-post'
     | '/api/recreate-script'
     | '/inteligencia-viral/analizar-perfil'
@@ -169,6 +193,8 @@ export interface RootRouteChildren {
   EditorRoute: typeof EditorRoute
   InteligenciaViralRoute: typeof InteligenciaViralRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ApiAnalizarPerfilRoute: typeof ApiAnalizarPerfilRoute
+  ApiBuscarViralesRoute: typeof ApiBuscarViralesRoute
   ApiEnhancePostRoute: typeof ApiEnhancePostRoute
   ApiRecreateScriptRoute: typeof ApiRecreateScriptRoute
 }
@@ -252,6 +278,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiEnhancePostRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/buscar-virales': {
+      id: '/api/buscar-virales'
+      path: '/api/buscar-virales'
+      fullPath: '/api/buscar-virales'
+      preLoaderRoute: typeof ApiBuscarViralesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/analizar-perfil': {
+      id: '/api/analizar-perfil'
+      path: '/api/analizar-perfil'
+      fullPath: '/api/analizar-perfil'
+      preLoaderRoute: typeof ApiAnalizarPerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -278,6 +318,8 @@ const rootRouteChildren: RootRouteChildren = {
   EditorRoute: EditorRoute,
   InteligenciaViralRoute: InteligenciaViralRouteWithChildren,
   LoginRoute: LoginRoute,
+  ApiAnalizarPerfilRoute: ApiAnalizarPerfilRoute,
+  ApiBuscarViralesRoute: ApiBuscarViralesRoute,
   ApiEnhancePostRoute: ApiEnhancePostRoute,
   ApiRecreateScriptRoute: ApiRecreateScriptRoute,
 }
