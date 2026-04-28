@@ -223,13 +223,23 @@ function SpyAgentPage() {
         <div className="grid gap-3">
           {accounts.map((acc) => (
             <Card key={acc.id} className="p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-              <img src={acc.avatar_url} alt={acc.handle} className="h-10 w-10 rounded-full bg-muted shrink-0" />
+              <img src={acc.avatar_url} alt={acc.handle} className="h-10 w-10 rounded-full object-cover bg-muted shrink-0" onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(acc.handle)}&background=random`; }} />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <p className="text-sm font-medium text-foreground truncate">{acc.display_name || acc.handle}</p>
                   <PlatformIcon platform={acc.platform} size={14} className="text-muted-foreground" />
                   {acc.detected_within_24h && (
-                    <span className="rounded-md bg-primary/15 text-primary border border-primary/30 px-1.5 py-0.5 text-[10px] font-semibold">NUEVO</span>
+                    <span className="rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 text-[10px] font-semibold">
+                      Viral detectado
+                    </span>
+                  )}
+                  {acc.last_viral_thumbnail && (
+                    <img
+                      src={acc.last_viral_thumbnail}
+                      alt="Último viral"
+                      className="h-10 w-10 rounded-md object-cover border border-border"
+                      onError={(e) => { e.currentTarget.style.display = "none"; }}
+                    />
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground">@{acc.handle}</p>
