@@ -35,6 +35,9 @@ function BuscadorPage() {
     setActiveNiche(niche);
     setLoading(true);
     setVideos([]);
+    const timeoutId = setTimeout(() => {
+      toast.info("Apify está procesando... puede tardar hasta 30 segundos la primera vez.");
+    }, 15000);
     try {
       const res = await fetch("/api/buscar-virales", {
         method: "POST",
@@ -53,6 +56,7 @@ function BuscadorPage() {
       const msg = e instanceof Error ? e.message : "Error inesperado";
       toast.error(msg);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   }
