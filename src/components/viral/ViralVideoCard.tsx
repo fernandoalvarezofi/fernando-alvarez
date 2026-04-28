@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { PlatformIcon } from "./PlatformIcon";
 import { ViralScoreBadge } from "./ViralScoreBadge";
-import { Heart, Eye, MessageCircle } from "lucide-react";
+import { Heart, Eye, MessageCircle, ImageOff } from "lucide-react";
 import { formatCompact, type ViralVideo } from "@/lib/viral/types";
 
 interface ViralVideoCardProps {
