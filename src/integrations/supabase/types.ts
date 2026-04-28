@@ -289,6 +289,30 @@ export type Database = {
         }
         Relationships: []
       }
+      viral_cache: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          niche: string
+          platform: string
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id?: string
+          niche: string
+          platform?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          niche?: string
+          platform?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
