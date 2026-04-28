@@ -72,9 +72,7 @@ export const Route = createFileRoute("/api/buscar-virales")({
 
           // 1) Buscar en cache
           const cacheCutoff = new Date(Date.now() - CACHE_TTL_HOURS * 60 * 60 * 1000).toISOString();
-          const { data: cached } = await serviceClient
-            .from("viral_cache")
-            // @ts-expect-error - tabla recién creada
+          const { data: cached } = await (serviceClient.from("viral_cache" as any) as any)
             .select("data")
             .eq("niche", niche)
             .eq("platform", platform)
