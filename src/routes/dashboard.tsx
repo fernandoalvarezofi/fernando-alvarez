@@ -267,6 +267,12 @@ function DashboardPage() {
 
   const firstName = profile.display_name?.split(" ")[0] || "creador";
   const getThumbnail = (draftId: string) => thumbnails.find((t) => t.draftId === draftId);
+  const visibleDrafts = drafts.filter((d) => {
+    const t = (d.title || "").trim();
+    if (t.length <= 3) return false;
+    if (/^(.)\1+$/.test(t)) return false;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-background">
