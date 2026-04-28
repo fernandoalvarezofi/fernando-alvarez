@@ -34,23 +34,23 @@ export function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          <a href="#features" className="transition-colors hover:text-foreground">Features</a>
-          <a href="#how-it-works" className="transition-colors hover:text-foreground">How it works</a>
-          <a href="#" className="transition-colors hover:text-foreground">Pricing</a>
+          <a href="#features" className="transition-colors hover:text-foreground">Funcionalidades</a>
+          <a href="#how-it-works" className="transition-colors hover:text-foreground">Cómo funciona</a>
+          <a href="#" className="transition-colors hover:text-foreground">Precios</a>
         </div>
 
         <div className="flex items-center gap-3">
           {user ? (
             <Button size="sm" asChild>
-              <Link to="/editor">Open editor</Link>
+              <Link to="/editor">Abrir editor</Link>
             </Button>
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">Log in</Link>
+                <Link to="/login">Iniciar sesión</Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/login">Sign up free</Link>
+                <Link to="/login">Registrate gratis</Link>
               </Button>
             </>
           )}
