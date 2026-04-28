@@ -7,10 +7,10 @@ export function FooterSection() {
         <div className="flex flex-col items-center text-center gap-4">
           <img src={logoPinpost} alt="PinPost" className="h-8 w-auto" />
           <p className="text-sm text-muted-foreground max-w-md">
-            Precision previews for modern marketing teams. Built for creators who care about how their content looks.
+            Previews precisos para creadores y equipos modernos. Hecho para quienes les importa cómo se ve su contenido.
           </p>
           <p className="text-xs text-muted-foreground/60 mt-4">
-            © {new Date().getFullYear()} PinPost. All rights reserved.
+            © {new Date().getFullYear()} PinPost. Todos los derechos reservados.
           </p>
         </div>
       </div>
