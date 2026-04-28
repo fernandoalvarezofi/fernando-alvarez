@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { PlatformIcon } from "./PlatformIcon";
 import { ViralScoreBadge } from "./ViralScoreBadge";
-import { Heart, Eye, MessageCircle } from "lucide-react";
+import { Heart, Eye, MessageCircle, ImageOff } from "lucide-react";
 import { formatCompact, type ViralVideo } from "@/lib/viral/types";
 
 interface ViralVideoCardProps {
@@ -10,6 +11,9 @@ interface ViralVideoCardProps {
 }
 
 export function ViralVideoCard({ video, onClick }: ViralVideoCardProps) {
+  const [thumbFailed, setThumbFailed] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const showThumb = video.thumbnail && !thumbFailed;
   return (
     <button
       type="button"
@@ -18,12 +22,20 @@ export function ViralVideoCard({ video, onClick }: ViralVideoCardProps) {
     >
       <Card className="overflow-hidden border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/30">
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
-          <img
-            src={video.thumbnail}
-            alt={video.caption}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          {showThumb ? (
+            <img
+              src={video.thumbnail}
+              alt={video.caption}
+              loading="lazy"
+              onError={() => setThumbFailed(true)}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="h-full w-full flex flex-col items-center justify-center gap-1.5 text-muted-foreground/50">
+              <ImageOff className="h-8 w-8" />
+              <span className="text-[10px]">Sin preview</span>
+            </div>
+          )}
           <div className="absolute top-2 left-2 flex h-7 w-7 items-center justify-center rounded-md bg-background/90 backdrop-blur-sm text-foreground shadow-sm">
             <PlatformIcon platform={video.platform} size={14} />
           </div>
@@ -34,9 +46,12 @@ export function ViralVideoCard({ video, onClick }: ViralVideoCardProps) {
         <div className="p-3 space-y-2">
           <div className="flex items-center gap-2 min-w-0">
             <img
-              src={video.creatorAvatar}
+              src={avatarFailed || !video.creatorAvatar
+                ? `https://ui-avatars.com/api/?name=${encodeURIComponent(video.creatorName || video.creatorHandle || "?")}&background=random`
+                : video.creatorAvatar}
               alt={video.creatorName}
-              className="h-6 w-6 rounded-full bg-muted shrink-0"
+              onError={() => setAvatarFailed(true)}
+              className="h-6 w-6 rounded-full object-cover bg-muted shrink-0"
             />
             <div className="min-w-0 flex-1">
               <p className="text-xs font-medium text-foreground truncate">{video.creatorName}</p>

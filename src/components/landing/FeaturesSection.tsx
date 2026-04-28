@@ -6,17 +6,17 @@ export function FeaturesSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-            Everything you need to preview with confidence
+            Todo lo que necesitás para previsualizar con confianza
           </h2>
           <p className="mt-4 text-muted-foreground">
-            One editor. Four platforms. Zero guesswork.
+            Un editor. Cuatro plataformas. Cero suposiciones.
           </p>
         </div>
 
         <div className="relative mx-auto max-w-5xl">
           <div className="absolute -top-3 left-6 z-10 flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-live" />
-            Live preview
+            Preview en vivo
           </div>
           <div className="rounded-xl border border-border bg-card shadow-lg overflow-hidden">
             <div className="border-b border-border bg-surface px-4 py-2.5 flex items-center gap-2">

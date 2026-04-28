@@ -35,6 +35,9 @@ function BuscadorPage() {
     setActiveNiche(niche);
     setLoading(true);
     setVideos([]);
+    const timeoutId = setTimeout(() => {
+      toast.info("Apify está procesando... puede tardar hasta 30 segundos la primera vez.");
+    }, 15000);
     try {
       const res = await fetch("/api/buscar-virales", {
         method: "POST",
@@ -53,6 +56,7 @@ function BuscadorPage() {
       const msg = e instanceof Error ? e.message : "Error inesperado";
       toast.error(msg);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   }
@@ -136,14 +140,19 @@ function BuscadorPage() {
       )}
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="aspect-square w-full" />
-              <Skeleton className="h-3 w-3/4" />
-              <Skeleton className="h-3 w-1/2" />
-            </div>
-          ))}
+        <div className="space-y-4">
+          <p className="text-xs text-muted-foreground text-center">
+            Buscando virales reales en Instagram... esto puede tardar unos segundos.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="h-3 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            ))}
+          </div>
         </div>
       ) : !activeNiche ? (
         <div className="rounded-xl border border-dashed border-border py-16 text-center">
@@ -153,8 +162,10 @@ function BuscadorPage() {
           </p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border py-16 text-center">
-          <p className="text-sm text-muted-foreground">No hay videos que coincidan con los filtros.</p>
+        <div className="rounded-xl border border-dashed border-border py-16 text-center px-6">
+          <p className="text-sm text-muted-foreground">
+            No encontramos virales para <span className="font-medium text-foreground">"{activeNiche}"</span>. Probá con un nicho en inglés o uno más específico (ej: "fitness", "marketing").
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
