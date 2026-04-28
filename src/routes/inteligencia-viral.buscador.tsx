@@ -8,13 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ViralVideoCard } from "@/components/viral/ViralVideoCard";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
 import { SUGGESTED_NICHES, PLATFORM_LABELS, type Platform, type ViralVideo } from "@/lib/viral/types";
-import { getMockViralVideos } from "@/lib/viral/mockData";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/inteligencia-viral/buscador")({
   component: BuscadorPage,
 });
 
 function BuscadorPage() {
+  const { session } = useAuth();
   const [query, setQuery] = useState("");
   const [activeNiche, setActiveNiche] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,15 +26,35 @@ function BuscadorPage() {
   const [selected, setSelected] = useState<ViralVideo | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  function runSearch(niche: string) {
+  async function runSearch(niche: string) {
     if (!niche.trim()) return;
+    if (!session) {
+      toast.error("Necesitás iniciar sesión para buscar virales.");
+      return;
+    }
     setActiveNiche(niche);
     setLoading(true);
-    // Simulamos llamada a API
-    setTimeout(() => {
-      setVideos(getMockViralVideos(niche, 16));
+    setVideos([]);
+    try {
+      const res = await fetch("/api/buscar-virales", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ niche, platform: "instagram" }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Error al buscar virales");
+      }
+      setVideos(Array.isArray(data.videos) ? data.videos : []);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Error inesperado";
+      toast.error(msg);
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   }
 
   const filtered = useMemo(() => {
