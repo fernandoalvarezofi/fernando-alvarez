@@ -6,10 +6,10 @@ export function FeaturesSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-            Everything you need to preview with confidence
+            Todo lo que necesitás para previsualizar con confianza
           </h2>
           <p className="mt-4 text-muted-foreground">
-            One editor. Four platforms. Zero guesswork.
+            Un editor. Cuatro plataformas. Cero suposiciones.
           </p>
         </div>
 
