@@ -3,23 +3,23 @@ import { useEffect, useRef, useState } from "react";
 const steps = [
   {
     number: "01",
-    title: "Write your content",
-    description: "Type your post in the unified editor. Character counts update in real time for every platform.",
+    title: "Escribí tu contenido",
+    description: "Escribí tu post en el editor unificado. El conteo de caracteres se actualiza en tiempo real para cada plataforma.",
   },
   {
     number: "02",
-    title: "Upload your visuals",
-    description: "Add images and see how they'll crop on each platform. Aspect ratio guides show you exactly what's visible.",
+    title: "Subí tus imágenes",
+    description: "Agregá imágenes y mirá cómo se recortan en cada red. Las guías de aspect ratio te muestran exactamente lo que se ve.",
   },
   {
     number: "03",
-    title: "Review every preview",
-    description: "All four platform previews update as you type. Spot issues before your audience does.",
+    title: "Revisá cada preview",
+    description: "Las cuatro previsualizaciones se actualizan mientras escribís. Detectá problemas antes que tu audiencia.",
   },
   {
     number: "04",
-    title: "Publish with confidence",
-    description: "Export your optimized content or copy it directly to each platform. No more post-publish regrets.",
+    title: "Publicá con confianza",
+    description: "Copiá tu contenido optimizado a cada plataforma. Sin arrepentimientos después de publicar.",
   },
 ];
 
