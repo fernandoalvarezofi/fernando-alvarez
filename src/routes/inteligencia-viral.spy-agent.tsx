@@ -275,7 +275,14 @@ function SpyAgentPage() {
                   <Switch checked={acc.is_active} onCheckedChange={() => toggleActive(acc)} />
                   <span className="text-[11px] text-muted-foreground">{acc.is_active ? "Activo" : "Pausado"}</span>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => viewAnalysis(acc)}>Ver análisis</Button>
+                <Button variant="outline" size="sm" onClick={() => viewAnalysis(acc)} disabled={!!analyzingId}>
+                  {analyzingId === acc.id ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Analizando...
+                    </span>
+                  ) : "Ver análisis"}
+                </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeAccount(acc.id)}>
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
