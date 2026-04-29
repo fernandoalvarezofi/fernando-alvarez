@@ -132,7 +132,9 @@ export const Route = createFileRoute("/api/analizar-perfil")({
 
           const videos: ViralVideo[] = validPosts.map((p: any, i: number) => {
             const views = p.videoPlayCount || (p.likesCount || 0) * 8 || 0;
-            const viralScore = avgViews > 0 ? Math.round((views / avgViews) * 10) / 10 : 1;
+            const viralScore = avgViews > 10
+              ? Math.round((views / avgViews) * 10) / 10
+              : views > 1000 ? 2 : 1;
             const captionStr = String(p.caption || "");
             return {
               id: String(p.id || p.shortCode || i),

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,7 +31,17 @@ interface RecreatedScript {
 }
 
 export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScriptModalProps) {
-  const { session } = useAuth();
+  const { user } = useAuth();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    import("@/integrations/supabase/client").then(({ supabase }) => {
+      supabase.auth.getSession().then(({ data }) => {
+        setAccessToken(data.session?.access_token ?? null);
+      });
+    });
+  }, [user]);
+
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("question");
   const [adaptation, setAdaptation] = useState<AdaptationQuestion | null>(null);
@@ -44,7 +54,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
 
   // Cargar la pregunta de adaptación al abrir
   async function loadQuestion() {
-    if (!session) {
+    if (!accessToken) {
       setError("Necesitás iniciar sesión para usar la IA.");
       return;
     }
@@ -55,7 +65,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           mode: "question",
@@ -81,7 +91,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
   }
 
   async function generateScript() {
-    if (!session) return;
+    if (!accessToken) return;
     const userAdaptation = useCustom ? customAnswer.trim() : selectedOption;
     if (!userAdaptation) {
       toast.error("Elegí una opción o escribí tu propio ejemplo.");
@@ -94,7 +104,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           mode: "generate",
