@@ -172,9 +172,14 @@ function AnalizarPerfilPage() {
               </div>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              Esta cuenta no tiene videos que superen significativamente su promedio.
-            </p>
+            <div className="rounded-xl border border-dashed border-border py-10 text-center">
+              <p className="text-sm text-foreground">
+                <strong>No encontramos videos públicos para @{profile.handle}</strong>.
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                La cuenta puede ser privada o no tener reels publicados.
+              </p>
+            </div>
           )}
         </div>
       )}
