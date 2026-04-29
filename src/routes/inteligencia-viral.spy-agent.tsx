@@ -143,17 +143,37 @@ function SpyAgentPage() {
     } catch (e) { console.error(e); }
   }
 
-  function viewAnalysis(acc: TrackedAccount) {
-    // Mock: tomamos el primer viral de un nicho dummy
-    const v = getMockViralVideos(acc.handle, 1)[0];
-    if (v) {
-      setDrawerVideo({
-        ...v,
-        creatorName: acc.display_name || acc.handle,
-        creatorHandle: `@${acc.handle}`,
-        creatorAvatar: acc.avatar_url,
-        platform: acc.platform,
+  async function viewAnalysis(acc: TrackedAccount) {
+    if (analyzingId) return;
+    setAnalyzingId(acc.id);
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch("/api/analizar-perfil", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ handle: acc.handle, platform: acc.platform }),
       });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Error al analizar");
+
+      if (json.videos?.length > 0) {
+        const top = json.videos.reduce(
+          (best: ViralVideo, v: ViralVideo) => (v.viralScore > best.viralScore ? v : best),
+          json.videos[0],
+        );
+        setDrawerVideo(top);
+      } else {
+        toast.info(`@${acc.handle} no tiene videos virales recientes.`);
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "No se pudo analizar la cuenta.";
+      toast.error(msg);
+    } finally {
+      setAnalyzingId(null);
     }
   }
 
