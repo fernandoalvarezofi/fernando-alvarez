@@ -16,7 +16,7 @@ import { PLATFORM_LABELS, type Platform, type ViralVideo } from "@/lib/viral/typ
 import { PlatformIcon } from "@/components/viral/PlatformIcon";
 import { ViralScoreBadge } from "@/components/viral/ViralScoreBadge";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
-import { getMockViralVideos } from "@/lib/viral/mockData";
+
 
 export const Route = createFileRoute("/inteligencia-viral/spy-agent")({
   component: SpyAgentPage,
