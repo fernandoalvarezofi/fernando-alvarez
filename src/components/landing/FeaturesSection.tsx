@@ -6,10 +6,10 @@ export function FeaturesSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight text-foreground md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-            Todo lo que necesitás para previsualizar con confianza
+            Todo lo que necesitás para crear contenido viral
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Un editor. Cuatro plataformas. Cero suposiciones.
+            Buscá virales. Espiá competidores. Analizá perfiles. Recreá guiones con IA.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ export function FeaturesSection() {
                 <div className="h-2.5 w-2.5 rounded-full bg-border" />
               </div>
               <div className="ml-4 flex-1 rounded-md bg-background border border-border px-3 py-1 text-xs text-muted-foreground">
-                pinpost.app/editor
+                pinpost.app
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-border">

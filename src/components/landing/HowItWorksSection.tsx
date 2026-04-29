@@ -3,23 +3,23 @@ import { useEffect, useRef, useState } from "react";
 const steps = [
   {
     number: "01",
-    title: "Escribí tu contenido",
-    description: "Escribí tu post en el editor unificado. El conteo de caracteres se actualiza en tiempo real para cada plataforma.",
+    title: "Buscá virales en tu nicho",
+    description: "Escribí tu nicho o elegí una categoría y encontrá los videos que más están pegando en Instagram ahora mismo.",
   },
   {
     number: "02",
-    title: "Subí tus imágenes",
-    description: "Agregá imágenes y mirá cómo se recortan en cada red. Las guías de aspect ratio te muestran exactamente lo que se ve.",
+    title: "Descubrí qué los hace funcionar",
+    description: "Analizá el hook, la estructura y los triggers de cada video viral. Entendé el patrón antes de copiar a ciegas.",
   },
   {
     number: "03",
-    title: "Revisá cada preview",
-    description: "Las cuatro previsualizaciones se actualizan mientras escribís. Detectá problemas antes que tu audiencia.",
+    title: "Recreá el guión con IA",
+    description: "Con un click, la IA adapta el guión del viral a tu voz y tu nicho. Listo para grabar.",
   },
   {
     number: "04",
-    title: "Publicá con confianza",
-    description: "Copiá tu contenido optimizado a cada plataforma. Sin arrepentimientos después de publicar.",
+    title: "Monitoreá a tu competencia",
+    description: "Spy Agent rastrea las cuentas que elegís y te avisa por email cada vez que publican algo viral.",
   },
 ];
 
@@ -43,7 +43,7 @@ export function HowItWorksSection() {
       <div className="mx-auto max-w-6xl px-6" ref={ref}>
         <div className="mx-auto max-w-2xl text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight text-background md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-            Del borrador al post perfecto en minutos
+            Del nicho al guión viral en minutos
           </h2>
         </div>
 

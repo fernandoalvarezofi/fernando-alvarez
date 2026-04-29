@@ -5,9 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ViralVideoCard } from "@/components/viral/ViralVideoCard";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
-import { SUGGESTED_NICHES, PLATFORM_LABELS, type Platform, type ViralVideo } from "@/lib/viral/types";
+import { SUGGESTED_NICHES, PLATFORM_LABELS, formatCompact, type Platform, type ViralVideo } from "@/lib/viral/types";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
@@ -72,7 +71,7 @@ function BuscadorPage() {
   }, [videos, platformFilter, scoreFilter]);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Buscador de virales</h1>
         <p className="text-sm text-muted-foreground">
@@ -168,13 +167,46 @@ function BuscadorPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
           {filtered.map((v) => (
-            <ViralVideoCard
+            <button
               key={v.id}
-              video={v}
+              type="button"
               onClick={() => { setSelected(v); setDrawerOpen(true); }}
-            />
+              className="group relative aspect-[9/14] overflow-hidden rounded-xl bg-muted text-left ring-1 ring-border hover:ring-primary/50 transition-all"
+            >
+              {v.thumbnail ? (
+                <img
+                  src={v.thumbnail}
+                  alt={v.caption}
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/40 text-xs">
+                  Sin preview
+                </div>
+              )}
+              {/* Overlay oscuro */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/40" />
+
+              {/* Score arriba a la izquierda */}
+              <div className="absolute top-2 left-2">
+                <span className="inline-flex items-center rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground shadow-sm tracking-wide">
+                  SCORE {v.viralScore.toFixed(2)}x
+                </span>
+              </div>
+
+              {/* Info abajo */}
+              <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3 space-y-1 text-white">
+                <p className="text-xs font-semibold truncate drop-shadow">@{v.creatorHandle?.replace("@", "")}</p>
+                <div className="flex items-center gap-3 text-[10px] font-medium opacity-90">
+                  <span>▶ {formatCompact(v.views)}</span>
+                  <span>♥ {formatCompact(v.likes)}</span>
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       )}

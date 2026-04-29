@@ -5,10 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { SocialCarousel } from "./SocialCarousel";
 import logoPinpost from "@/assets/logo-pinpost.png";
 
-
 export function HeroSection() {
   const { user } = useAuth();
-  const ctaLink = user ? "/editor" : "/login";
+  const ctaLink = user ? "/inteligencia-viral/buscador" : "/login";
 
   return (
     <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-32">
@@ -37,20 +36,20 @@ export function HeroSection() {
             className="text-4xl font-semibold tracking-tight text-foreground opacity-0 animate-fade-up md:text-6xl"
             style={{ lineHeight: 1.1, letterSpacing: "-0.03em", textWrap: "balance" }}
           >
-            Mirá exactamente cómo queda tu post antes de publicarlo
+            Encontrá virales en tu nicho y recreá su guión con IA
           </h1>
 
           <p
             className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground opacity-0 animate-fade-up-delay"
             style={{ textWrap: "pretty" }}
           >
-            Previsualizá tu contenido en Instagram, LinkedIn, X y Facebook desde un solo editor. Totalmente gratis, sin trampas.
+            Buscá los videos que están rompiendo en Instagram, analizá qué los hace funcionar y generá tu propio guión adaptado a tu marca — en segundos.
           </p>
 
           <div className="mt-10 flex items-center justify-center gap-4 opacity-0 animate-fade-up-delay">
             <Button variant="hero" size="xl" asChild>
               <Link to={ctaLink}>
-                {user ? "Abrir editor" : "Empezá gratis"}
+                {user ? "Abrir app" : "Empezar gratis"}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>

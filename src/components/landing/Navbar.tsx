@@ -42,7 +42,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           {user ? (
             <Button size="sm" asChild>
-              <Link to="/editor">Abrir editor</Link>
+              <Link to="/inteligencia-viral/buscador">Abrir app</Link>
             </Button>
           ) : (
             <>
@@ -50,7 +50,7 @@ export function Navbar() {
                 <Link to="/login">Iniciar sesión</Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/login">Registrate gratis</Link>
+                <Link to="/login">Registrarse gratis</Link>
               </Button>
             </>
           )}
