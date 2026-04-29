@@ -101,7 +101,7 @@ Devolveme la pregunta de adaptación y 3 opciones concretas.`;
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                model: "google/gemini-3-flash-preview",
+                model: "google/gemini-flash-1.5",
                 messages: [
                   { role: "system", content: systemPrompt },
                   { role: "user", content: userPrompt },
@@ -173,7 +173,7 @@ Reescribí el video completo manteniendo la estructura viral.`;
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              model: "google/gemini-3-flash-preview",
+              model: "google/gemini-flash-1.5",
               messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
