@@ -117,14 +117,10 @@ function AnalizarPerfilPage() {
         <div className="space-y-6">
           {/* Header del perfil */}
           <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-            <img
-              src={profile.avatar}
-              alt={profile.displayName}
-              className="h-16 w-16 rounded-full object-cover bg-muted shrink-0"
-              onError={(e) => {
-                e.currentTarget.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(profile.displayName) + "&background=random";
-              }}
-            />
+            {/* Avatar con fallback — Instagram bloquea CORS en fotos de perfil */}
+            <div className="h-16 w-16 rounded-full bg-primary/15 text-primary flex items-center justify-center text-xl font-semibold shrink-0">
+              {profile.displayName?.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase() || "?"}
+            </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-semibold text-foreground truncate">{profile.displayName}</h2>
