@@ -118,9 +118,34 @@ function SpyAgentPage() {
         avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(handle)}`,
       }).select().single();
       if (error) throw error;
-      setAccounts((prev) => [data as TrackedAccount, ...prev]);
+      const inserted = data as TrackedAccount;
+      setAccounts((prev) => [inserted, ...prev]);
       setAddOpen(false); setNewHandle(""); setNewPlatform("instagram");
       toast.success("Cuenta agregada al Spy Agent.");
+
+      // Obtener datos reales del perfil en segundo plano
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const profileRes = await fetch("/api/analizar-perfil", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({ handle, platform: newPlatform }),
+        });
+        const profileJson = await profileRes.json();
+        if (profileRes.ok && profileJson.displayName) {
+          await supabase.from("tracked_accounts").update({
+            display_name: profileJson.displayName,
+          }).eq("id", inserted.id);
+          setAccounts((prev) => prev.map((a) =>
+            a.id === inserted.id ? { ...a, display_name: profileJson.displayName } : a,
+          ));
+        }
+      } catch {
+        // silencioso
+      }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Error";
       toast.error(msg.includes("duplicate") ? "Esa cuenta ya está siendo monitoreada." : "No se pudo agregar.");
