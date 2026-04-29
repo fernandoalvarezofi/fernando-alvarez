@@ -144,12 +144,12 @@ function AnalizarPerfilPage() {
             <div className="h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={profile.history}>
-                  <XAxis dataKey="index" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => `#${Number(v) + 1}`} />
+                  <XAxis dataKey="index" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => `#${Number(v)}`} />
                   <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => formatCompact(v)} />
                   <Tooltip
                     contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
-                    formatter={(v: number) => formatCompact(v)}
-                    labelFormatter={(v) => `Video #${Number(v) + 1}`}
+                    formatter={(v: number) => [`${formatCompact(v)} views`, ""]}
+                    labelFormatter={(v) => `Video #${Number(v)}`}
                   />
                   <ReferenceLine y={profile.averageViews} stroke="var(--muted-foreground)" strokeDasharray="3 3" label={{ value: "Promedio", fontSize: 10, fill: "var(--muted-foreground)" }} />
                   <Line type="monotone" dataKey="views" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3 }} />
