@@ -56,6 +56,7 @@ function SpyAgentPage() {
   const [newHandle, setNewHandle] = useState("");
   const [newPlatform, setNewPlatform] = useState<Platform>("instagram");
   const [drawerVideo, setDrawerVideo] = useState<ViralVideo | null>(null);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
