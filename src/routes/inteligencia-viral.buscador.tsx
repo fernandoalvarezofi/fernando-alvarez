@@ -72,7 +72,7 @@ function BuscadorPage() {
   }, [videos, platformFilter, scoreFilter]);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">Buscador de virales</h1>
         <p className="text-sm text-muted-foreground">
