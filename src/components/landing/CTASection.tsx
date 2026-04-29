@@ -33,15 +33,15 @@ export function CTASection() {
         }}
       >
         <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-4xl" style={{ letterSpacing: "-0.02em" }}>
-          Dejá de adivinar. Empezá a previsualizar.
+          Dejá de adivinar qué funciona. Empezá a replicar lo que ya funciona.
         </h2>
         <p className="mt-4 text-muted-foreground text-lg">
-          Gratis para todos. Sin tarjeta, sin límites.
+          Gratis para empezar. Sin tarjeta de crédito.
         </p>
         <div className="mt-8">
           <Button variant="hero" size="xl" asChild>
-            <Link to={user ? "/editor" : "/login"}>
-              {user ? "Abrir editor" : "Empezá gratis"}
+            <Link to={user ? "/inteligencia-viral/buscador" : "/login"}>
+              {user ? "Abrir app" : "Empezar gratis"}
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
