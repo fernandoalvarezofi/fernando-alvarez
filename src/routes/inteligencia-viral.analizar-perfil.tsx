@@ -117,14 +117,10 @@ function AnalizarPerfilPage() {
         <div className="space-y-6">
           {/* Header del perfil */}
           <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-            <img
-              src={profile.avatar}
-              alt={profile.displayName}
-              className="h-16 w-16 rounded-full object-cover bg-muted shrink-0"
-              onError={(e) => {
-                e.currentTarget.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(profile.displayName) + "&background=random";
-              }}
-            />
+            {/* Avatar con fallback — Instagram bloquea CORS en fotos de perfil */}
+            <div className="h-16 w-16 rounded-full bg-primary/15 text-primary flex items-center justify-center text-xl font-semibold shrink-0">
+              {profile.displayName?.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase() || "?"}
+            </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-semibold text-foreground truncate">{profile.displayName}</h2>
@@ -148,12 +144,12 @@ function AnalizarPerfilPage() {
             <div className="h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={profile.history}>
-                  <XAxis dataKey="index" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => `#${Number(v) + 1}`} />
+                  <XAxis dataKey="index" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => `#${Number(v)}`} />
                   <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" tickFormatter={(v) => formatCompact(v)} />
                   <Tooltip
                     contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
-                    formatter={(v: number) => formatCompact(v)}
-                    labelFormatter={(v) => `Video #${Number(v) + 1}`}
+                    formatter={(v: number) => [`${formatCompact(v)} views`, ""]}
+                    labelFormatter={(v) => `Video #${Number(v)}`}
                   />
                   <ReferenceLine y={profile.averageViews} stroke="var(--muted-foreground)" strokeDasharray="3 3" label={{ value: "Promedio", fontSize: 10, fill: "var(--muted-foreground)" }} />
                   <Line type="monotone" dataKey="views" stroke="var(--primary)" strokeWidth={2} dot={{ r: 3 }} />
@@ -176,9 +172,14 @@ function AnalizarPerfilPage() {
               </div>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground text-center py-8">
-              Esta cuenta no tiene videos que superen significativamente su promedio.
-            </p>
+            <div className="rounded-xl border border-dashed border-border py-10 text-center">
+              <p className="text-sm text-foreground">
+                <strong>No encontramos videos públicos para @{profile.handle}</strong>.
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                La cuenta puede ser privada o no tener reels publicados.
+              </p>
+            </div>
           )}
         </div>
       )}

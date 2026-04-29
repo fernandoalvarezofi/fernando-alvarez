@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Trash2, Eye, Bell, BellOff } from "lucide-react";
+import { Plus, Trash2, Eye, Bell, BellOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,7 @@ import { PLATFORM_LABELS, type Platform, type ViralVideo } from "@/lib/viral/typ
 import { PlatformIcon } from "@/components/viral/PlatformIcon";
 import { ViralScoreBadge } from "@/components/viral/ViralScoreBadge";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
-import { getMockViralVideos } from "@/lib/viral/mockData";
+
 
 export const Route = createFileRoute("/inteligencia-viral/spy-agent")({
   component: SpyAgentPage,
@@ -56,6 +56,7 @@ function SpyAgentPage() {
   const [newHandle, setNewHandle] = useState("");
   const [newPlatform, setNewPlatform] = useState<Platform>("instagram");
   const [drawerVideo, setDrawerVideo] = useState<ViralVideo | null>(null);
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -117,9 +118,34 @@ function SpyAgentPage() {
         avatar_url: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(handle)}`,
       }).select().single();
       if (error) throw error;
-      setAccounts((prev) => [data as TrackedAccount, ...prev]);
+      const inserted = data as TrackedAccount;
+      setAccounts((prev) => [inserted, ...prev]);
       setAddOpen(false); setNewHandle(""); setNewPlatform("instagram");
       toast.success("Cuenta agregada al Spy Agent.");
+
+      // Obtener datos reales del perfil en segundo plano
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const profileRes = await fetch("/api/analizar-perfil", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`,
+          },
+          body: JSON.stringify({ handle, platform: newPlatform }),
+        });
+        const profileJson = await profileRes.json();
+        if (profileRes.ok && profileJson.displayName) {
+          await supabase.from("tracked_accounts").update({
+            display_name: profileJson.displayName,
+          }).eq("id", inserted.id);
+          setAccounts((prev) => prev.map((a) =>
+            a.id === inserted.id ? { ...a, display_name: profileJson.displayName } : a,
+          ));
+        }
+      } catch {
+        // silencioso
+      }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Error";
       toast.error(msg.includes("duplicate") ? "Esa cuenta ya está siendo monitoreada." : "No se pudo agregar.");
@@ -142,17 +168,37 @@ function SpyAgentPage() {
     } catch (e) { console.error(e); }
   }
 
-  function viewAnalysis(acc: TrackedAccount) {
-    // Mock: tomamos el primer viral de un nicho dummy
-    const v = getMockViralVideos(acc.handle, 1)[0];
-    if (v) {
-      setDrawerVideo({
-        ...v,
-        creatorName: acc.display_name || acc.handle,
-        creatorHandle: `@${acc.handle}`,
-        creatorAvatar: acc.avatar_url,
-        platform: acc.platform,
+  async function viewAnalysis(acc: TrackedAccount) {
+    if (analyzingId) return;
+    setAnalyzingId(acc.id);
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch("/api/analizar-perfil", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ handle: acc.handle, platform: acc.platform }),
       });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Error al analizar");
+
+      if (json.videos?.length > 0) {
+        const top = json.videos.reduce(
+          (best: ViralVideo, v: ViralVideo) => (v.viralScore > best.viralScore ? v : best),
+          json.videos[0],
+        );
+        setDrawerVideo(top);
+      } else {
+        toast.info(`@${acc.handle} no tiene videos virales recientes.`);
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "No se pudo analizar la cuenta.";
+      toast.error(msg);
+    } finally {
+      setAnalyzingId(null);
     }
   }
 
@@ -254,7 +300,14 @@ function SpyAgentPage() {
                   <Switch checked={acc.is_active} onCheckedChange={() => toggleActive(acc)} />
                   <span className="text-[11px] text-muted-foreground">{acc.is_active ? "Activo" : "Pausado"}</span>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => viewAnalysis(acc)}>Ver análisis</Button>
+                <Button variant="outline" size="sm" onClick={() => viewAnalysis(acc)} disabled={!!analyzingId}>
+                  {analyzingId === acc.id ? (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Analizando...
+                    </span>
+                  ) : "Ver análisis"}
+                </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeAccount(acc.id)}>
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>

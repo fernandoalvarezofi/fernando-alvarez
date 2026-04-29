@@ -79,96 +79,100 @@ export const Route = createFileRoute("/api/analizar-perfil")({
 
           const cleanHandle = handleRaw.replace("@", "").trim();
 
-          const apifyRes = await fetch(
-            `https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_API_KEY}`,
+          // Llamada 1: datos del perfil
+          const profileRes = await fetch(
+            `https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=30`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ usernames: [cleanHandle], resultsLimit: 20 }),
+              body: JSON.stringify({ usernames: [cleanHandle] }),
             },
           );
 
-          if (!apifyRes.ok) {
-            const errText = await apifyRes.text();
-            console.error("Apify error:", apifyRes.status, errText);
+          if (!profileRes.ok) {
+            const errText = await profileRes.text();
+            console.error("Apify profile error:", profileRes.status, errText);
             return Response.json(
               { error: "No pudimos analizar este perfil ahora. Probá de nuevo." },
               { status: 502 },
             );
           }
 
-          const profilesArr: any[] = await apifyRes.json();
-          const profile = Array.isArray(profilesArr) ? profilesArr[0] : null;
+          const profilesArr: any[] = await profileRes.json();
+          const profileData = Array.isArray(profilesArr) ? profilesArr[0] : null;
 
-          if (!profile || profile.error) {
+          if (!profileData || profileData.error) {
             return Response.json(
-              { error: "No encontramos ese perfil. Verificá el handle." },
+              { error: "Perfil no encontrado" },
               { status: 404 },
             );
           }
 
-          const posts: any[] = Array.isArray(profile.latestPosts) ? profile.latestPosts : [];
-
-          // Calcular promedio de views
-          const viewsArr = posts.map(
-            (p: any) => p.videoPlayCount || (p.likesCount || 0) * 8 || 0,
+          // Llamada 2: posts reales
+          const postsRes = await fetch(
+            `https://api.apify.com/v2/acts/apify~instagram-post-scraper/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=60`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username: [cleanHandle], resultsLimit: 12 }),
+            },
           );
-          const totalViews = viewsArr.reduce((s, v) => s + v, 0);
-          const averageViews = viewsArr.length > 0 ? Math.round(totalViews / viewsArr.length) : 0;
 
-          // Mapear a videos virales (score >= 3 frente al promedio)
-          const videos: ViralVideo[] = posts
-            .map((p: any, idx: number): ViralVideo | null => {
-              try {
-                const views = p.videoPlayCount || (p.likesCount || 0) * 8 || 0;
-                const score =
-                  averageViews > 0
-                    ? Math.min(50, Math.max(1, Math.round(views / averageViews)))
-                    : 1;
-                const captionStr = String(p.caption || "");
-                return {
-                  id: String(p.id || p.shortCode || `post-${idx}`),
-                  platform: "instagram",
-                  niche: "perfil",
-                  creatorName: String(profile.fullName || profile.username || cleanHandle),
-                  creatorHandle: "@" + String(profile.username || cleanHandle),
-                  creatorAvatar: String(profile.profilePicUrlHD || profile.profilePicUrl || ""),
-                  thumbnail: String(p.displayUrl || p.thumbnailUrl || ""),
-                  caption: captionStr.slice(0, 300),
-                  views,
-                  likes: p.likesCount || 0,
-                  comments: p.commentsCount || 0,
-                  publishedAt: String(p.timestamp || new Date().toISOString()),
-                  viralScore: score,
-                  transcript: "",
-                  hookAnalysis: {
-                    text: captionStr.split(".")[0].slice(0, 100),
-                    why: "Analizado por IA",
-                  },
-                  structure: [],
-                  triggers: [],
-                };
-              } catch {
-                return null;
-              }
-            })
-            .filter((v): v is ViralVideo => v !== null && v.viralScore >= 3);
+          const postsRaw: any = postsRes.ok ? await postsRes.json() : [];
+          const validPosts = Array.isArray(postsRaw)
+            ? postsRaw.filter((p: any) => p && (p.videoPlayCount || p.likesCount))
+            : [];
 
-          const history = viewsArr
-            .slice()
-            .reverse()
-            .map((views, index) => ({ index: index + 1, views }));
+          const avgViews = validPosts.length > 0
+            ? validPosts.reduce(
+                (s: number, p: any) => s + (p.videoPlayCount || (p.likesCount || 0) * 8 || 0),
+                0,
+              ) / validPosts.length
+            : 0;
+
+          const videos: ViralVideo[] = validPosts.map((p: any, i: number) => {
+            const views = p.videoPlayCount || (p.likesCount || 0) * 8 || 0;
+            const viralScore = avgViews > 0 ? Math.round((views / avgViews) * 10) / 10 : 1;
+            const captionStr = String(p.caption || "");
+            return {
+              id: String(p.id || p.shortCode || i),
+              platform: "instagram",
+              niche: cleanHandle,
+              creatorName: String(profileData.fullName || cleanHandle),
+              creatorHandle: "@" + cleanHandle,
+              creatorAvatar: "",
+              thumbnail: String(p.displayUrl || p.thumbnailUrl || ""),
+              caption: captionStr.slice(0, 300),
+              views,
+              likes: p.likesCount || 0,
+              comments: p.commentsCount || 0,
+              publishedAt: String(p.timestamp || new Date().toISOString()),
+              viralScore,
+              transcript: "",
+              hookAnalysis: {
+                text: captionStr.split(".")[0].slice(0, 100),
+                why: "Analizado por IA",
+              },
+              structure: [],
+              triggers: [],
+            };
+          });
+
+          const history = validPosts.map((p: any, i: number) => ({
+            index: i + 1,
+            views: p.videoPlayCount || (p.likesCount || 0) * 8 || 0,
+          }));
 
           const result: ProfileAnalysis = {
             handle: cleanHandle,
             platform,
-            displayName: String(profile.fullName || profile.username || cleanHandle),
-            avatar: String(profile.profilePicUrlHD || profile.profilePicUrl || ""),
-            followers: Number(profile.followersCount || 0),
-            following: Number(profile.followsCount || 0),
-            posts: Number(profile.postsCount || posts.length || 0),
+            displayName: String(profileData.fullName || cleanHandle),
+            avatar: "",
+            followers: Number(profileData.followersCount || 0),
+            following: Number(profileData.followsCount || 0),
+            posts: Number(profileData.postsCount || 0),
             history,
-            averageViews,
+            averageViews: Math.round(avgViews),
             videos,
           };
 
