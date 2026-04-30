@@ -11,7 +11,7 @@ import {
   Send,
   Repeat,
 } from "lucide-react";
-import landingAvatar from "@/assets/landing-avatar.jpg";
+import landingAvatar from "@/assets/fer-struzzi.jpg";
 import previewInstagram from "@/assets/preview-instagram.jpg";
 import previewLinkedin from "@/assets/preview-linkedin.jpg";
 import previewX from "@/assets/preview-x.jpg";
@@ -35,27 +35,27 @@ const platformMeta = {
 
 const platformContent = {
   instagram: {
-    displayName: "Sarah Chen",
-    handle: "sarahcreates",
-    text: "Just launched something incredible 🚀 Check out PinPost — preview your posts across every platform before you publish. No more guessing!",
+    displayName: "Fer Struzzi",
+    handle: "ferstruzzi",
+    text: "Acabo de lanzar algo increíble 🚀 Probá WOREF — previsualizá tus posts en todas las plataformas antes de publicar. Sin más adivinanzas!",
     dims: "1080×1080",
   },
   linkedin: {
-    displayName: "Sarah Chen",
+    displayName: "Fer Struzzi",
     handle: "Content Strategist · 2h",
-    text: "Excited to announce PinPost — the precision preview tool for modern marketing teams. See exactly how your content renders across Instagram, X, LinkedIn, and Facebook.",
+    text: "Emocionado de anunciar WOREF — la herramienta de previsualización precisa para equipos de marketing modernos. Mirá exactamente cómo se ve tu contenido en Instagram, X, LinkedIn y Facebook.",
     dims: "1200×1200",
   },
   x: {
-    displayName: "Sarah Chen",
-    handle: "@sarahcreates · 3h",
-    text: "Your post looks different on every platform.\n\nPinPost fixes that.\n\nPreview across Instagram, LinkedIn, X, and Facebook — in real time. ✨",
+    displayName: "Fer Struzzi",
+    handle: "@ferstruzzi · 3h",
+    text: "Tu post se ve distinto en cada plataforma.\n\nWOREF lo soluciona.\n\nPrevisualizá en Instagram, LinkedIn, X y Facebook — en tiempo real. ✨",
     dims: "1080×1080",
   },
   facebook: {
-    displayName: "Sarah Chen",
+    displayName: "Fer Struzzi",
     handle: "Just now · 🌐",
-    text: "Stop guessing how your posts will look. PinPost gives you pixel-perfect previews across every major platform. Try it free today 🎯",
+    text: "Dejá de adivinar cómo se van a ver tus posts. WOREF te da previews pixel-perfect en todas las plataformas principales. Probalo gratis en woref.com 🎯",
     dims: "1080×1080",
   },
 };
@@ -81,7 +81,7 @@ export function PreviewCard({ platform }: { platform: Platform }) {
         {/* User info */}
         <div className="flex items-center gap-2.5 mb-3">
           <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-            <img src={landingAvatar} alt="Sarah Chen" className="h-full w-full object-cover" />
+            <img src={landingAvatar} alt="Fer Struzzi" className="h-full w-full object-cover" />
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground leading-none">
