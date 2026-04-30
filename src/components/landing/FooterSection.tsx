@@ -1,4 +1,3 @@
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export function FooterSection() {
   return (

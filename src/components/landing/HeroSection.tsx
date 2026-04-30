@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { SocialCarousel } from "./SocialCarousel";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export function HeroSection() {
   const { user } = useAuth();

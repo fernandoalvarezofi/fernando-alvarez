@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Plus, Trash2, LogOut, FileText, Clock, Sparkles, Image as ImageIcon, PenLine, Eye, Video, Flame } from "lucide-react";
-import logoPinpost from "@/assets/logo-pinpost.png";
 import { Button } from "@/components/ui/button";
 import { FORMAT_PRESETS, type FormatKey } from "@/components/editor/formatPresets";
 

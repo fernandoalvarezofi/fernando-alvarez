@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useRef } from "react";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export function Navbar() {
   const { user } = useAuth();

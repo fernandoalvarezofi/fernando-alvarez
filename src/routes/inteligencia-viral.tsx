@@ -4,7 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { LogOut, Search, Eye, UserSearch, Video, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export const Route = createFileRoute("/inteligencia-viral")({
   component: InteligenciaViralLayout,

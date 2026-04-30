@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 type LovableModule = typeof import("@/integrations/lovable/index");
 
