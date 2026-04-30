@@ -116,7 +116,7 @@ function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center gap-2 mb-8">
-          <Link to="/"><img src={logoPinpost} alt="WOREF" className="h-10 w-auto" /></Link>
+          <Link to="/"><span className="text-3xl font-bold tracking-tight text-foreground">WOREF</span></Link>
           <p className="text-sm text-muted-foreground text-center">
             Iniciá sesión para previsualizar tus publicaciones en cada red social
           </p>

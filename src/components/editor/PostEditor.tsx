@@ -477,7 +477,7 @@ export function PostEditor() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <img src={logoPinpost} alt="WOREF" className="h-6 w-auto" />
+          <span className="text-lg font-bold tracking-tight text-foreground">WOREF</span>
         </div>
 
         <div className="flex items-center gap-2">

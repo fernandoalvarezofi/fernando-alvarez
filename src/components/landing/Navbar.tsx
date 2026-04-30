@@ -29,7 +29,7 @@ export function Navbar() {
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center text-foreground">
-          <img src={logoPinpost} alt="WOREF" className="h-7 w-auto" />
+          <span className="text-xl font-bold tracking-tight text-foreground">WOREF</span>
         </Link>
 
         <div className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">

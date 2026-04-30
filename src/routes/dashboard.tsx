@@ -278,7 +278,7 @@ function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-white px-6">
         <div className="flex items-center gap-2.5">
-          <img src={logoPinpost} alt="WOREF" className="h-7 w-auto" />
+          <span className="text-xl font-bold tracking-tight text-foreground">WOREF</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-muted-foreground hidden md:inline">{user.email}</span>
