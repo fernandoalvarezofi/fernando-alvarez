@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { SocialCarousel } from "./SocialCarousel";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export function HeroSection() {
   const { user } = useAuth();
@@ -31,7 +30,7 @@ export function HeroSection() {
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-3xl text-center">
-          <img src={logoPinpost} alt="PinPost" className="mx-auto mb-8 h-12 md:h-16 w-auto" />
+          <span className="text-4xl font-bold tracking-tight text-foreground mx-auto mb-8">WOREF</span>
           <h1
             className="text-4xl font-semibold tracking-tight text-foreground opacity-0 animate-fade-up md:text-6xl"
             style={{ lineHeight: 1.1, letterSpacing: "-0.03em", textWrap: "balance" }}

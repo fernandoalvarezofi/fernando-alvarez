@@ -4,7 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { LogOut, Search, Eye, UserSearch, Video, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import logoPinpost from "@/assets/logo-pinpost.png";
 
 export const Route = createFileRoute("/inteligencia-viral")({
   component: InteligenciaViralLayout,
@@ -78,13 +77,13 @@ function InteligenciaViralLayout() {
         {/* Logo */}
         <div className="px-5 py-5 border-b border-border">
           <Link to="/dashboard" className="flex items-center gap-2.5">
-            <img src={logoPinpost} alt="PinPost" className="h-7 w-auto" />
+            <span className="text-xl font-bold tracking-tight text-foreground">WOREF</span>
           </Link>
           <p className="mt-3 text-sm font-semibold text-foreground flex items-center gap-1.5">
             <Zap className="h-3.5 w-3.5 text-primary" />
             Inteligencia Viral
           </p>
-          <p className="text-[11px] text-muted-foreground">by PinPost</p>
+          <p className="text-[11px] text-muted-foreground">by WOREF</p>
         </div>
 
         {/* Nav */}
@@ -141,7 +140,7 @@ function InteligenciaViralLayout() {
       {/* Mobile top bar (sidebar oculta en móvil) */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-30 flex h-14 items-center justify-between border-b border-border bg-card px-4">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <img src={logoPinpost} alt="PinPost" className="h-6 w-auto" />
+          <span className="text-lg font-bold tracking-tight text-foreground">WOREF</span>
           <span className="text-sm font-semibold text-foreground">Viral</span>
         </Link>
         <button onClick={signOut} className="text-muted-foreground"><LogOut className="h-4 w-4" /></button>

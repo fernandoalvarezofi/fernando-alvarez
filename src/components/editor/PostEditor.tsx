@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, ImagePlus, Video, LogOut, X as XIcon, FileImage, FileVideo, ChevronDown, AlertCircle, RotateCw } from "lucide-react";
-import logoPinpost from "@/assets/logo-pinpost.png";
 import { Button } from "@/components/ui/button";
 import { PlatformPreview } from "./PlatformPreview";
 import { useAuth } from "@/hooks/useAuth";
@@ -478,7 +477,7 @@ export function PostEditor() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <img src={logoPinpost} alt="PinPost" className="h-6 w-auto" />
+          <span className="text-lg font-bold tracking-tight text-foreground">WOREF</span>
         </div>
 
         <div className="flex items-center gap-2">

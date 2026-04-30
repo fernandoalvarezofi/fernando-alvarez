@@ -26,7 +26,7 @@ export function FeaturesSection() {
                 <div className="h-2.5 w-2.5 rounded-full bg-border" />
               </div>
               <div className="ml-4 flex-1 rounded-md bg-background border border-border px-3 py-1 text-xs text-muted-foreground">
-                pinpost.app
+                woref.com
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 divide-x divide-border">
