@@ -36,22 +36,31 @@ Deno.serve(async () => {
 
   for (const account of accounts) {
     try {
-      const apifyRes = await fetch(
+      // Llamada 1: perfil
+      const profileRes = await fetch(
         `https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            usernames: [String(account.handle).replace("@", "")],
-            resultsLimit: 10,
-          }),
+          body: JSON.stringify({ usernames: [String(account.handle).replace("@", "")] }),
         },
       );
-      const arr = await apifyRes.json();
-      const profile = Array.isArray(arr) ? arr[0] : null;
-      if (!profile?.latestPosts?.length) continue;
+      const profileArr = await profileRes.json();
+      const profile = Array.isArray(profileArr) ? profileArr[0] : null;
+      if (!profile) continue;
 
-      const posts = profile.latestPosts as any[];
+      // Llamada 2: posts reales
+      const postsRes = await fetch(
+        `https://api.apify.com/v2/acts/apify~instagram-post-scraper/run-sync-get-dataset-items?token=${APIFY_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usernames: String(account.handle).replace("@", ""), resultsLimit: 10 }),
+        },
+      );
+      const postsRaw = postsRes.ok ? await postsRes.json() : [];
+      const posts: any[] = Array.isArray(postsRaw) ? postsRaw.filter((p: any) => p && (p.videoPlayCount || p.likesCount)) : [];
+      if (!posts.length) continue;
       const avgViews =
         posts.reduce(
           (s: number, p: any) => s + (p.videoPlayCount || (p.likesCount || 0) * 8 || 0),
