@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
 import { SUGGESTED_NICHES, PLATFORM_LABELS, formatCompact, type Platform, type ViralVideo } from "@/lib/viral/types";
-import { useAuth } from "@/hooks/useAuth";
+
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/inteligencia-viral/buscador")({
@@ -15,7 +15,6 @@ export const Route = createFileRoute("/inteligencia-viral/buscador")({
 });
 
 function BuscadorPage() {
-  const { session } = useAuth();
   const [query, setQuery] = useState("");
   const [activeNiche, setActiveNiche] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,35 +26,34 @@ function BuscadorPage() {
 
   async function runSearch(niche: string) {
     if (!niche.trim()) return;
-    if (!session) {
-      toast.error("Necesitás iniciar sesión para buscar virales.");
-      return;
-    }
     setActiveNiche(niche);
     setLoading(true);
     setVideos([]);
-    const timeoutId = setTimeout(() => {
-      toast.info("Apify está procesando... puede tardar hasta 30 segundos la primera vez.");
-    }, 15000);
     try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Tu sesion expiró. Iniciá sesión de nuevo.");
+        setLoading(false);
+        return;
+      }
       const res = await fetch("/api/buscar-virales", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ niche, platform: "instagram" }),
+        body: JSON.stringify({ niche, platform: platformFilter }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Error al buscar virales");
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Error al buscar");
+      setVideos(json.videos || []);
+      if ((json.videos || []).length === 0) {
+        toast.info(`No encontramos virales para "${niche}". Probá con un nicho en inglés o más específico.`);
       }
-      setVideos(Array.isArray(data.videos) ? data.videos : []);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Error inesperado";
-      toast.error(msg);
+    } catch (e: any) {
+      toast.error(e.message || "No se pudo buscar. Intentá de nuevo.");
     } finally {
-      clearTimeout(timeoutId);
       setLoading(false);
     }
   }

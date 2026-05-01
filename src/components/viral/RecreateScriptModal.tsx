@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { Sparkles, RefreshCw, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
 import type { ViralVideo } from "@/lib/viral/types";
 
 interface RecreateScriptModalProps {
@@ -31,17 +30,6 @@ interface RecreatedScript {
 }
 
 export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScriptModalProps) {
-  const { user } = useAuth();
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    import("@/integrations/supabase/client").then(({ supabase }) => {
-      supabase.auth.getSession().then(({ data }) => {
-        setAccessToken(data.session?.access_token ?? null);
-      });
-    });
-  }, [user]);
-
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("question");
   const [adaptation, setAdaptation] = useState<AdaptationQuestion | null>(null);
@@ -54,8 +42,10 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
 
   // Cargar la pregunta de adaptación al abrir
   async function loadQuestion() {
-    if (!accessToken) {
-      setError("Necesitás iniciar sesión para usar la IA.");
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Tu sesion expiró. Iniciá sesión de nuevo.");
       return;
     }
     setLoadingQuestion(true);
@@ -65,7 +55,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           mode: "question",
@@ -91,10 +81,15 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
   }
 
   async function generateScript() {
-    if (!accessToken) return;
     const userAdaptation = useCustom ? customAnswer.trim() : selectedOption;
     if (!userAdaptation) {
       toast.error("Elegí una opción o escribí tu propio ejemplo.");
+      return;
+    }
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Tu sesion expiró. Iniciá sesión de nuevo.");
       return;
     }
     setStep("loading");
@@ -104,7 +99,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           mode: "generate",
