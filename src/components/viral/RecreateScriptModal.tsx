@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { Sparkles, RefreshCw, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
 import type { ViralVideo } from "@/lib/viral/types";
 
 interface RecreateScriptModalProps {
@@ -31,17 +30,6 @@ interface RecreatedScript {
 }
 
 export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScriptModalProps) {
-  const { user } = useAuth();
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    import("@/integrations/supabase/client").then(({ supabase }) => {
-      supabase.auth.getSession().then(({ data }) => {
-        setAccessToken(data.session?.access_token ?? null);
-      });
-    });
-  }, [user]);
-
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>("question");
   const [adaptation, setAdaptation] = useState<AdaptationQuestion | null>(null);
