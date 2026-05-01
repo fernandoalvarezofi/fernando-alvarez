@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
 import { SUGGESTED_NICHES, PLATFORM_LABELS, formatCompact, type Platform, type ViralVideo } from "@/lib/viral/types";
-import { useAuth } from "@/hooks/useAuth";
+
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/inteligencia-viral/buscador")({
