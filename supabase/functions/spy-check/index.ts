@@ -55,7 +55,7 @@ Deno.serve(async () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usernames: String(account.handle).replace("@", ""), resultsLimit: 10 }),
+          body: JSON.stringify({ username: [String(account.handle).replace("@", "")], resultsLimit: 10 }),
         },
       );
       const postsRaw = postsRes.ok ? await postsRes.json() : [];

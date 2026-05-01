@@ -13,13 +13,14 @@ import { PlatformIcon } from "@/components/viral/PlatformIcon";
 import { PLATFORM_LABELS, formatCompact, type Platform, type ProfileAnalysis, type ViralVideo } from "@/lib/viral/types";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/inteligencia-viral/analizar-perfil")({
   component: AnalizarPerfilPage,
 });
 
 function AnalizarPerfilPage() {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
   const [handle, setHandle] = useState("");
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [loading, setLoading] = useState(false);
@@ -28,13 +29,15 @@ function AnalizarPerfilPage() {
 
   async function analyze() {
     if (!handle.trim()) return;
-    if (!session) {
-      toast.error("Necesitás iniciar sesión para analizar perfiles.");
-      return;
-    }
     setLoading(true);
     setProfile(null);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Tu sesión expiró. Iniciá sesión de nuevo.");
+        setLoading(false);
+        return;
+      }
       const res = await fetch("/api/analizar-perfil", {
         method: "POST",
         headers: {

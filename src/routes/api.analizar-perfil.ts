@@ -114,7 +114,7 @@ export const Route = createFileRoute("/api/analizar-perfil")({
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ usernames: cleanHandle, resultsLimit: 12 }),
+              body: JSON.stringify({ username: [cleanHandle], resultsLimit: 12 }),
             },
           );
 
