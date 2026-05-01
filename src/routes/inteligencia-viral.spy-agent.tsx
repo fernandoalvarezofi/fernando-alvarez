@@ -16,6 +16,7 @@ import { PLATFORM_LABELS, type Platform, type ViralVideo } from "@/lib/viral/typ
 import { PlatformIcon } from "@/components/viral/PlatformIcon";
 import { ViralScoreBadge } from "@/components/viral/ViralScoreBadge";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
+import { proxyImage } from "@/lib/imageProxy";
 
 
 export const Route = createFileRoute("/inteligencia-viral/spy-agent")({
@@ -281,7 +282,7 @@ function SpyAgentPage() {
                   )}
                   {acc.last_viral_thumbnail && (
                     <img
-                      src={acc.last_viral_thumbnail}
+                      src={proxyImage(acc.last_viral_thumbnail)}
                       alt="Último viral"
                       className="h-10 w-10 rounded-md object-cover border border-border"
                       onError={(e) => { e.currentTarget.style.display = "none"; }}
