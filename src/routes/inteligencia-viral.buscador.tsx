@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ViralVideoDrawer } from "@/components/viral/ViralVideoDrawer";
 import { SUGGESTED_NICHES, PLATFORM_LABELS, formatCompact, type Platform, type ViralVideo } from "@/lib/viral/types";
+import { proxyImage } from "@/lib/imageProxy";
 
 import { toast } from "sonner";
 
@@ -175,7 +176,7 @@ function BuscadorPage() {
             >
               {v.thumbnail ? (
                 <img
-                  src={v.thumbnail}
+                  src={proxyImage(v.thumbnail)}
                   alt={v.caption}
                   loading="lazy"
                   onError={(e) => { e.currentTarget.style.display = "none"; }}

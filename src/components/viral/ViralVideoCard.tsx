@@ -4,6 +4,7 @@ import { PlatformIcon } from "./PlatformIcon";
 import { ViralScoreBadge } from "./ViralScoreBadge";
 import { Heart, Eye, MessageCircle, ImageOff } from "lucide-react";
 import { formatCompact, type ViralVideo } from "@/lib/viral/types";
+import { proxyImage } from "@/lib/imageProxy";
 
 interface ViralVideoCardProps {
   video: ViralVideo;
@@ -24,7 +25,7 @@ export function ViralVideoCard({ video, onClick }: ViralVideoCardProps) {
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
           {showThumb ? (
             <img
-              src={video.thumbnail}
+              src={proxyImage(video.thumbnail)}
               alt={video.caption}
               loading="lazy"
               onError={() => setThumbFailed(true)}
@@ -48,7 +49,7 @@ export function ViralVideoCard({ video, onClick }: ViralVideoCardProps) {
             <img
               src={avatarFailed || !video.creatorAvatar
                 ? `https://ui-avatars.com/api/?name=${encodeURIComponent(video.creatorName || video.creatorHandle || "?")}&background=random`
-                : video.creatorAvatar}
+                : proxyImage(video.creatorAvatar)}
               alt={video.creatorName}
               onError={() => setAvatarFailed(true)}
               className="h-6 w-6 rounded-full object-cover bg-muted shrink-0"

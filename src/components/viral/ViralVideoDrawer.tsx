@@ -5,6 +5,7 @@ import { PlatformIcon } from "./PlatformIcon";
 import { ViralScoreBadge } from "./ViralScoreBadge";
 import { Sparkles, Eye, Heart, MessageCircle, Quote, Brain, Clock } from "lucide-react";
 import { formatCompact, type ViralVideo } from "@/lib/viral/types";
+import { proxyImage } from "@/lib/imageProxy";
 import { useState } from "react";
 import { RecreateScriptModal } from "./RecreateScriptModal";
 
@@ -28,7 +29,7 @@ export function ViralVideoDrawer({ video, open, onOpenChange }: ViralVideoDrawer
         >
           {/* Hero */}
           <div className="relative aspect-video w-full bg-muted overflow-hidden">
-            <img src={video.thumbnail} alt={video.caption} className="h-full w-full object-cover" />
+            <img src={proxyImage(video.thumbnail)} alt={video.caption} className="h-full w-full object-cover" />
             <div className="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-md bg-background/90 backdrop-blur-sm shadow-sm">
               <PlatformIcon platform={video.platform} size={16} />
             </div>
@@ -41,7 +42,7 @@ export function ViralVideoDrawer({ video, open, onOpenChange }: ViralVideoDrawer
             <SheetHeader className="space-y-2 text-left">
               <div className="flex items-center gap-2.5">
                 <img
-                  src={video.creatorAvatar}
+                  src={proxyImage(video.creatorAvatar)}
                   alt={video.creatorName}
                   className="h-9 w-9 rounded-full bg-muted"
                 />
