@@ -81,10 +81,15 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
   }
 
   async function generateScript() {
-    if (!accessToken) return;
     const userAdaptation = useCustom ? customAnswer.trim() : selectedOption;
     if (!userAdaptation) {
       toast.error("Elegí una opción o escribí tu propio ejemplo.");
+      return;
+    }
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Tu sesion expiró. Iniciá sesión de nuevo.");
       return;
     }
     setStep("loading");
@@ -94,7 +99,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           mode: "generate",
