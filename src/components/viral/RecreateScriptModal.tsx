@@ -42,8 +42,10 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
 
   // Cargar la pregunta de adaptación al abrir
   async function loadQuestion() {
-    if (!accessToken) {
-      setError("Necesitás iniciar sesión para usar la IA.");
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Tu sesion expiró. Iniciá sesión de nuevo.");
       return;
     }
     setLoadingQuestion(true);
@@ -53,7 +55,7 @@ export function RecreateScriptModal({ video, open, onOpenChange }: RecreateScrip
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           mode: "question",
